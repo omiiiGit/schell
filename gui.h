@@ -3,11 +3,12 @@
 
 #include <stdio.h>
 #include <ncurses.h>
+#include <stdbool.h>
+#include "color.h"
+#include "buck.h"
 
-static void
-init_gui();
+void init_gui();
 
-static void 
-init_color();
+void free_gui();
 
 #endif
