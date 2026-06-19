@@ -2,10 +2,12 @@
 #define BUCK_H
 
 #include <stdlib.h>
+#include <string.h>
+#include <ncurses.h>
 
 struct buck_t
 {
-	char name[28];
+	char name[128];
 	bool is_extended,is_selected;
 
 	struct buck_t *next;
@@ -20,6 +22,9 @@ struct buck_list_t
 	size_t size;
 };
 
+struct buck_list_t create_buck_list();
+void push_buck_to_list(struct buck_list_t *list, char *name);
+int free_buck_list(struct buck_list_t *list);
 
 
 #endif

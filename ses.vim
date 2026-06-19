@@ -23,10 +23,10 @@ nnoremap \m :noh
 nnoremap \t :tabe
 xmap gx <Plug>(open-word-under-cursor)
 nmap gx <Plug>(open-word-under-cursor)
-nnoremap <Plug>(-fzf-vim-do) :execute g:__fzf_command
-nnoremap <Plug>(-fzf-/) /
-nnoremap <Plug>(-fzf-:) :
 nnoremap <silent> <Plug>(-fzf-complete-finish) a
+nnoremap <Plug>(-fzf-:) :
+nnoremap <Plug>(-fzf-/) /
+nnoremap <Plug>(-fzf-vim-do) :execute g:__fzf_command
 xnoremap <Plug>(open-word-under-cursor) <ScriptCmd>vim9.Open(getregion(getpos('v'), getpos('.'), { type: mode() })->join())
 nnoremap <Plug>(open-word-under-cursor) <ScriptCmd>vim9.Open(GetWordUnderCursor())
 onoremap <silent> <Plug>(fzf-maps-o) :call fzf#vim#maps('o', 0)
@@ -111,6 +111,8 @@ set shiftwidth=4
 set suffixes=.bak,~,.o,.info,.swp,.aux,.bbl,.blg,.brf,.cb,.dvi,.idx,.ilg,.ind,.inx,.jpg,.log,.out,.png,.toc
 set tabstop=4
 set undodir=~/.cache/vim/undo//
+set winminheight=0
+set winminwidth=0
 let s:so_save = &g:so | let s:siso_save = &g:siso | setg so=0 siso=0 | setl so=-1 siso=-1
 let v:this_session=expand("<sfile>:p")
 doautoall SessionLoadPre
@@ -126,8 +128,8 @@ badd +1 makefile
 badd +1 gui.h
 badd +1 gui.c
 badd +1 color.h
-badd +21 buck.h
-badd +0 buck.c
+badd +1 buck.h
+badd +1 buck.c
 argglobal
 %argdel
 set stal=2
@@ -794,6 +796,7 @@ inoremap <buffer> <silent> § =AutoPairsMoveCharacter('''')
 inoremap <buffer> <silent> ¢ =AutoPairsMoveCharacter('"')
 inoremap <buffer> <silent> © =AutoPairsMoveCharacter(')')
 inoremap <buffer> <silent> ¨ =AutoPairsMoveCharacter('(')
+inoremap <buffer> <silent> Û =AutoPairsMoveCharacter('[')
 inoremap <buffer> <silent> î :call AutoPairsJump()a
 inoremap <buffer> <silent> <expr> ð AutoPairsToggle()
 inoremap <buffer> <silent> â =AutoPairsBackInsert()
@@ -962,12 +965,12 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 21 - ((20 * winheight(0) + 19) / 38)
+let s:l = 21 - ((0 * winheight(0) + 19) / 38)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
 keepjumps 21
-normal! 06|
+normal! 0
 wincmd w
 argglobal
 if bufexists(fnamemodify("buck.c", ":p")) | buffer buck.c | else | edit buck.c | endif
@@ -992,6 +995,7 @@ inoremap <buffer> <silent> § =AutoPairsMoveCharacter('''')
 inoremap <buffer> <silent> ¢ =AutoPairsMoveCharacter('"')
 inoremap <buffer> <silent> © =AutoPairsMoveCharacter(')')
 inoremap <buffer> <silent> ¨ =AutoPairsMoveCharacter('(')
+inoremap <buffer> <silent> Û =AutoPairsMoveCharacter('[')
 inoremap <buffer> <silent> î :call AutoPairsJump()a
 inoremap <buffer> <silent> <expr> ð AutoPairsToggle()
 inoremap <buffer> <silent> â =AutoPairsBackInsert()

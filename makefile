@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g -Wall -fsanitize=address
+CFLAGS = -g -Wall -fsanitize=address -I/home/om/include
 LDFLAGS = -lncurses
 
 PROG = schell
