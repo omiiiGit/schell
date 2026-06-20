@@ -2,8 +2,26 @@
 
 struct buck_list_t bucks;
 
+bool is_shell_executed = false;
+
 static wchar_t UPTRI[] =  L"\u25B6"; 
 static wchar_t DOTRI[]  = L"\u25BC"; 
+
+
+static void
+print_screen_info()
+{
+
+	attron(A_STANDOUT);
+	sprintf(BUFFER,"Screen -> %d x %d",COLS,LINES);
+	mvaddstr(0,COLS-BLEN,BUFFER);
+	sprintf(BUFFER,"Number of bucks-> %ld",bucks.size);
+	mvaddstr(1,COLS-BLEN,BUFFER);
+	attroff(A_STANDOUT);
+
+	move(0,0);
+}
+
 
 #define X(first,second) \
 	init_pair(first##_##second,COLOR_##first,COLOR_##second);
@@ -42,7 +60,7 @@ show_buck_list(struct buck_list_t *list)
 	{
 		if(t->is_selected)
 		{
-			chtype flag = COLOR_PAIR(BLACK_WHITE);
+			chtype flag = COLOR_PAIR(BLACK_YELLOW);
 
 			wchar_t *triangle= (t->is_extended) ? DOTRI : UPTRI;
 
@@ -55,7 +73,50 @@ show_buck_list(struct buck_list_t *list)
 		t = t->next;
 	}
 
+	refresh();
+
 	return list->size;
+}
+
+static void
+shell()
+{
+	echo();
+	char *bp;
+	int c;
+
+	move(LINES-1,0);
+	bp = BUFFER;
+
+	attron(COLOR_PAIR(GREEN_BLACK));printw(":");attroff(COLOR_PAIR(GREEN_BLACK));
+	while((c = getch()) != '\n' && c != _CHAR_ESC )
+	{
+		*bp++ = c;	
+	}
+	*bp = '\0';
+
+	noecho();
+}
+
+static void 
+main_event(int c)
+{
+	if(c == KEY_DOWN)
+	{
+		go_next_buck(&bucks);	
+	}
+	else if(c == KEY_UP)
+	{
+		go_prev_buck(&bucks);	
+	}
+	else if(c == _KEY_ENTER)
+	{
+		toggle_is_extended(bucks.selected);
+	}
+	else if(c == _CHAR_COLON)
+	{
+		shell();
+	}
 }
 
 void
@@ -66,6 +127,7 @@ init_gui()
 	initscr();
 	keypad(stdscr,TRUE);
 	noecho();
+	curs_set(0);
 
 	gui_init_color();
 
@@ -75,14 +137,17 @@ init_gui()
 void 
 run()
 {
-	int c;
+	int c = -1;
 
 	do{
+		main_event(c);	
+
 		clear(); move(0,0);
 
 		show_buck_list(&bucks);
+		print_screen_info();
 
-	}while((c = getch()) != 'q');
+	}while((c = getch()) != 'q' && c != _CHAR_ESC);
 }
 
 void

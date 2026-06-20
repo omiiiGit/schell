@@ -1,15 +1,23 @@
 #include "gui.h"
+#include <stdlib.h>
 
 int main(int argc,char *argv[])
 {
+
+	char name[128];
+	char num[28];
+
+
 	init_gui();
 
-	push_buck_to_list(&bucks,"Hari");
-	push_buck_to_list(&bucks,"Manik");
-	push_buck_to_list(&bucks,"hakamanish");
-	push_buck_to_list(&bucks,"vitasp");
+	for(int i = 0;i < 20;i++)
+	{
+		*name = '\0';
+		sprintf(num,"%d",i);
+		strcat(name,"buck-"); strcat(name,num);
 
-	bucks.tail->next->is_selected = true;
+		push_buck_to_list(&bucks,name);
+	}
 
 	run();
 

@@ -9,8 +9,17 @@
 #include <outils.h>
 #include "color.h"
 #include "buck.h"
+#include "buffer.h"
+
+
+#define BLEN (strlen(BUFFER))
+#define _KEY_ENTER 10
+#define _KEY_ESC 27
+#define _CHAR_COLON ':'
+#define _CHAR_ESC 27
 
 extern struct buck_list_t bucks;
+extern bool is_shell_executed;
 
 void init_gui();
 void run();
