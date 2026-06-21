@@ -1,8 +1,9 @@
 #include "gui.h"
 
 struct buck_list_t bucks;
-
 bool is_shell_executed = false;
+bool is_debug = false;
+int ec = -1;
 
 static wchar_t UPTRI[] =  L"\u25B6"; 
 static wchar_t DOTRI[]  = L"\u25BC"; 
@@ -11,12 +12,15 @@ static wchar_t DOTRI[]  = L"\u25BC";
 static void
 print_screen_info()
 {
+	char buffer[BUFFSIZE];
 
 	attron(A_STANDOUT);
-	sprintf(BUFFER,"Screen -> %d x %d",COLS,LINES);
-	mvaddstr(0,COLS-BLEN,BUFFER);
-	sprintf(BUFFER,"Number of bucks-> %ld",bucks.size);
-	mvaddstr(1,COLS-BLEN,BUFFER);
+	sprintf(buffer,"Screen -> %d x %d",COLS,LINES);
+	mvaddstr(0,COLS-strlen(buffer),buffer);
+	sprintf(buffer,"Number of bucks-> %ld",bucks.size);
+	mvaddstr(1,COLS-strlen(buffer),buffer);
+	sprintf(buffer,"buffer -> %s",BUFFER);
+	mvaddstr(2,COLS-strlen(buffer),buffer);
 	attroff(A_STANDOUT);
 
 	move(0,0);
@@ -81,21 +85,44 @@ show_buck_list(struct buck_list_t *list)
 static void
 shell()
 {
-	echo();
-	char *bp;
-	int c;
+	int c,n;
+	char *bp = BUFFER;
 
-	move(LINES-1,0);
-	bp = BUFFER;
+	c = n = 0;
 
-	attron(COLOR_PAIR(GREEN_BLACK));printw(":");attroff(COLOR_PAIR(GREEN_BLACK));
-	while((c = getch()) != '\n' && c != _CHAR_ESC )
+	move(LINES-1,1); clrtoeol();
+	attron(COLOR_PAIR(GREEN_BLACK));mvaddstr(LINES-1,0,":");attroff(COLOR_PAIR(GREEN_BLACK));
+
+	while((c = getch()) != '\n' && c != _CHAR_ESC && n < BUFFSIZE-1 )
 	{
-		*bp++ = c;	
+		if(c == KEY_BACKSPACE && n > 0)
+		{
+			*--bp = '\0';
+			n--;
+		}
+		else if(c != KEY_BACKSPACE)
+		{	
+			*bp++ = c;
+			*bp = '\0';
+			n++;
+		}
+		move(LINES-1,1); clrtoeol();
+		addstr(BUFFER);	addch(' ' | COLOR_PAIR(WHITE_WHITE)); refresh();
 	}
-	*bp = '\0';
 
-	noecho();
+	if(c == _CHAR_ESC)
+		return;
+
+	if(strcmp(BUFFER,"q") == 0)
+		ec = _CHAR_ESC;
+	else if(strcmp(BUFFER,"debug") == 0)
+		is_debug = (is_debug) ? false : true;
+	else
+	{
+		move(LINES-1,1); clrtoeol();
+		attron(COLOR_PAIR(RED_WHITE)); addstr("In valid command"); attroff(COLOR_PAIR(RED_WHITE)); refresh(); napms(500);
+
+	}
 }
 
 static void 
@@ -126,6 +153,7 @@ init_gui()
 
 	initscr();
 	keypad(stdscr,TRUE);
+	cbreak();
 	noecho();
 	curs_set(0);
 
@@ -137,17 +165,17 @@ init_gui()
 void 
 run()
 {
-	int c = -1;
-
 	do{
-		main_event(c);	
+		main_event(ec);	
 
 		clear(); move(0,0);
 
 		show_buck_list(&bucks);
-		print_screen_info();
 
-	}while((c = getch()) != 'q' && c != _CHAR_ESC);
+		if(is_debug)
+			print_screen_info();
+
+	}while(ec != _CHAR_ESC && (ec = getch()) != 'q' );
 }
 
 void

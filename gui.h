@@ -20,6 +20,8 @@
 
 extern struct buck_list_t bucks;
 extern bool is_shell_executed;
+extern bool is_debug;
+extern int ec;
 
 void init_gui();
 void run();
