@@ -1,12 +1,11 @@
 #include "gui.h"
+#include "utils.h"
 #include <stdlib.h>
 
 int main(int argc,char *argv[])
 {
-
 	char name[128];
 	char num[28];
-
 
 	init_gui();
 
@@ -14,8 +13,8 @@ int main(int argc,char *argv[])
 	{
 		*name = '\0';
 		sprintf(num,"%d",i);
-		strcat(name,"buck-"); strcat(name,num);
-
+		mystrcat(name,"buck-",num,NULL);
+		
 		push_buck_to_list(&bucks,name);
 	}
 

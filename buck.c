@@ -72,6 +72,7 @@ void go_next_buck(struct buck_list_t *list)
 		goto select;
 	}
 
+
 	list->selected = list->selected->next;
 
 select:
@@ -88,6 +89,7 @@ void go_prev_buck(struct buck_list_t *list)
 		list->selected = list->head;
 		goto select;
 	}
+
 
 	list->selected = list->selected->prev;
 

@@ -128,11 +128,11 @@ shell()
 static void 
 main_event(int c)
 {
-	if(c == KEY_DOWN)
+	if(c == KEY_DOWN || c == _KEY_J)
 	{
 		go_next_buck(&bucks);	
 	}
-	else if(c == KEY_UP)
+	else if(c == KEY_UP || c == _KEY_K)
 	{
 		go_prev_buck(&bucks);	
 	}
