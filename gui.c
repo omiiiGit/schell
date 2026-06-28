@@ -2,7 +2,7 @@
 
 struct buck_list_t bucks;
 bool is_shell_executed = false;
-bool is_debug = false;
+bool is_debug = true;
 int ec = -1;
 
 static wchar_t UPTRI[] =  L"\u25B6"; 
@@ -21,6 +21,8 @@ print_screen_info()
 	mvaddstr(1,COLS-strlen(buffer),buffer);
 	sprintf(buffer,"buffer -> %s",BUFFER);
 	mvaddstr(2,COLS-strlen(buffer),buffer);
+	sprintf(buffer,"List screen pos -> %d",bucks.pos);
+	mvaddstr(3,COLS-strlen(buffer),buffer);
 	attroff(A_STANDOUT);
 
 	move(0,0);
@@ -51,22 +53,29 @@ static size_t
 show_buck_list(struct buck_list_t *list)
 {
 
+	struct buck_t *t;
+
 	if(list->size == 0)
 	{
 		printf("buck list is empty\n");
-
 		return 0;
 	}
 
-	struct buck_t *t = list->tail;
+	int y,x;
 
-	while(t != NULL)
+	y = x = 0;
+
+	t = list->start_buck;
+
+	while(t != NULL && y != LINES - 2 )
 	{
+		getyx(stdscr,y,x);
+
 		if(t->is_selected)
 		{
 			chtype flag = COLOR_PAIR(BLACK_YELLOW);
 
-			wchar_t *triangle= (t->is_extended) ? DOTRI : UPTRI;
+			wchar_t *triangle = (t->is_extended) ? DOTRI : UPTRI;
 
 			attron(flag); addwstr(triangle); printw(" %s\n",t->name); attroff(flag); 
 			
@@ -130,7 +139,7 @@ main_event(int c)
 {
 	if(c == KEY_DOWN || c == _KEY_J)
 	{
-		go_next_buck(&bucks);	
+		go_next_buck(&bucks);		
 	}
 	else if(c == KEY_UP || c == _KEY_K)
 	{

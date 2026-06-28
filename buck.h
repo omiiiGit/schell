@@ -20,6 +20,9 @@ struct buck_list_t
 	struct buck_t *tail;
 	struct buck_t *selected;
 
+	struct buck_t *start_buck;
+
+	int pos;
 	size_t size;
 };
 

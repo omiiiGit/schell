@@ -9,7 +9,7 @@ int main(int argc,char *argv[])
 
 	init_gui();
 
-	for(int i = 0;i < 20;i++)
+	for(int i = 0;i < 70;i++)
 	{
 		*name = '\0';
 		sprintf(num,"%d",i);
