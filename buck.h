@@ -22,11 +22,12 @@ struct buck_list_t
 
 	struct buck_t *start_buck;
 
+	int lines;
 	int pos;
 	size_t size;
 };
 
-struct buck_list_t create_buck_list();
+struct buck_list_t create_buck_list(int lines);
 void push_buck_to_list(struct buck_list_t *list, char *name);
 int free_buck_list(struct buck_list_t *list);
 void go_next_buck(struct buck_list_t *list);

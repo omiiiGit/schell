@@ -9,10 +9,10 @@ int main(int argc,char *argv[])
 
 	init_gui();
 
-	for(int i = 0;i < 70;i++)
+	for(int i = 0;i < 10;i++)
 	{
 		*name = '\0';
-		sprintf(num,"%d",i);
+		snprintf(num,128,"%d",i);
 		mystrcat(name,"buck-",num,NULL);
 		
 		push_buck_to_list(&bucks,name);

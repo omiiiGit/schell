@@ -67,7 +67,7 @@ show_buck_list(struct buck_list_t *list)
 
 	t = list->start_buck;
 
-	while(t != NULL && y != LINES - 2 )
+	while(t != NULL && y != list->lines - 1)
 	{
 		getyx(stdscr,y,x);
 
@@ -104,7 +104,10 @@ shell()
 
 	while((c = getch()) != '\n' && c != _CHAR_ESC && n < BUFFSIZE-1 )
 	{
-		if(c == KEY_BACKSPACE && n > 0)
+		if(c == '\t')
+		{
+		}
+		else if(c == KEY_BACKSPACE && n > 0)
 		{
 			*--bp = '\0';
 			n--;
@@ -137,21 +140,13 @@ shell()
 static void 
 main_event(int c)
 {
-	if(c == KEY_DOWN || c == _KEY_J)
+	switch(c)
 	{
-		go_next_buck(&bucks);		
-	}
-	else if(c == KEY_UP || c == _KEY_K)
-	{
-		go_prev_buck(&bucks);	
-	}
-	else if(c == _KEY_ENTER)
-	{
-		toggle_is_extended(bucks.selected);
-	}
-	else if(c == _CHAR_COLON)
-	{
-		shell();
+		case KEY_DOWN: case _KEY_J: go_next_buck(&bucks); break;
+		case KEY_UP: case _KEY_K: go_prev_buck(&bucks); break;
+		case _KEY_ENTER: toggle_is_extended(bucks.selected); break;
+		case _CHAR_COLON: shell(); break;
+		default: break;
 	}
 }
 
@@ -168,7 +163,7 @@ init_gui()
 
 	gui_init_color();
 
-	bucks = create_buck_list();
+	bucks = create_buck_list(20);
 }
 
 void 
@@ -177,12 +172,14 @@ run()
 	do{
 		main_event(ec);	
 
-		clear(); move(0,0);
+		//clear(); move(0,0);
+		erase(); move(0,0);
 
 		show_buck_list(&bucks);
 
 		if(is_debug)
 			print_screen_info();
+
 
 	}while(ec != _CHAR_ESC && (ec = getch()) != 'q' );
 }

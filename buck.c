@@ -14,7 +14,7 @@ static struct buck_t
 }
 
 struct buck_list_t
-create_buck_list()
+create_buck_list(int lines)
 {
 	return (struct buck_list_t)
 	{
@@ -22,6 +22,7 @@ create_buck_list()
 		.tail = NULL,
 		.selected = NULL,
 		.start_buck = NULL,
+		.lines = lines,
 		.size = 0,
 		.pos = 0,
 	};
@@ -81,7 +82,7 @@ void go_next_buck(struct buck_list_t *list)
 		return;
 	}
 
-	if(list->pos >= LINES - 2)
+	if(list->pos >= list->lines - 1)
 	{
 		list->start_buck = list->selected->next;
 		change = true;
@@ -106,13 +107,16 @@ void go_prev_buck(struct buck_list_t *list)
 		list->selected->is_selected = true;
 
 		struct buck_t *b = list->head;
-		for(int i = 0;i < (list->size - LINES);i++)
+		
+		int foo = (list->size % list->lines == 0) ? list->lines : list->size % list->lines;
+
+		for(int i = 0;i < foo - 1;i++)
 		{
 			b = b->prev;
 		}
 		list->start_buck = b;
 
-		list->pos = (list->size - LINES);
+		list->pos = foo - 1;
 
 		return;	
 	}
@@ -120,7 +124,7 @@ void go_prev_buck(struct buck_list_t *list)
 	if(list->pos == 0)
 	{
 		struct buck_t *buck = NULL; int i = 0;
-		for(buck = list->selected; i <= LINES - 2; i++)
+		for(buck = list->selected; i <= list->lines - 1; i++)
 		{
 			if(buck->prev != NULL)
 				buck = buck->prev;
@@ -133,7 +137,7 @@ void go_prev_buck(struct buck_list_t *list)
 
 	list->selected = list->selected->prev;
 	list->selected->is_selected = true;
-	list->pos = (change) ? LINES - 2 : list->pos - 1;
+	list->pos = (change) ? list->lines - 1 : list->pos - 1;
 }
 
 void toggle_is_extended(struct buck_t *buck)
