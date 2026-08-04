@@ -15,10 +15,10 @@ $(PROG): $(OBJ)
 main.o: main.c gui.h utils.h
 	$(CC) -c $(CFLAGS) main.c
 
-gui.o: gui.c gui.h color.h buck.h
+gui.o: gui.c gui.h color.h buck.h controls.h
 	$(CC) -c $(CFLAGS) gui.c
 
-buck.o: buck.c buck.h
+buck.o: buck.c buck.h controls.h
 	$(CC) -c $(CFLAGS) buck.c
 
 buffer.o: buffer.h buffer.c

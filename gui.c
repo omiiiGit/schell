@@ -1,13 +1,14 @@
 #include "gui.h"
 
 struct buck_list_t bucks;
+struct buck_list_t ab;
+
 bool is_shell_executed = false;
 bool is_debug = true;
 int ec = -1;
 
-static wchar_t UPTRI[] =  L"\u25B6"; 
-static wchar_t DOTRI[]  = L"\u25BC"; 
-
+static int screen_width;
+static int screen_height;
 
 static void
 print_screen_info()
@@ -15,7 +16,8 @@ print_screen_info()
 	char buffer[BUFFSIZE];
 
 	attron(A_STANDOUT);
-	sprintf(buffer,"Screen -> %d x %d",COLS,LINES);
+	//sprintf(buffer,"Screen -> %d x %d",COLS,LINES);
+	sprintf(buffer,"Screen -> %d x %d",screen_height,screen_width);
 	mvaddstr(0,COLS-strlen(buffer),buffer);
 	sprintf(buffer,"Number of bucks-> %ld",bucks.size);
 	mvaddstr(1,COLS-strlen(buffer),buffer);
@@ -28,6 +30,11 @@ print_screen_info()
 	move(0,0);
 }
 
+static bool
+is_screen_resize()
+{
+	return (screen_height != LINES || screen_width != COLS) ? true : false;
+}
 
 #define X(first,second) \
 	init_pair(first##_##second,COLOR_##first,COLOR_##second);
@@ -49,49 +56,7 @@ gui_init_color()
 }
 #undef X
 
-static size_t 
-show_buck_list(struct buck_list_t *list)
-{
-
-	struct buck_t *t;
-
-	if(list->size == 0)
-	{
-		printf("buck list is empty\n");
-		return 0;
-	}
-
-	int y,x;
-
-	y = x = 0;
-
-	t = list->start_buck;
-
-	while(t != NULL && y != list->lines - 1)
-	{
-		getyx(stdscr,y,x);
-
-		if(t->is_selected)
-		{
-			chtype flag = COLOR_PAIR(BLACK_YELLOW);
-
-			wchar_t *triangle = (t->is_extended) ? DOTRI : UPTRI;
-
-			attron(flag); addwstr(triangle); printw(" %s\n",t->name); attroff(flag); 
-			
-		}
-		else 
-			printw("%s\n",t->name);
-
-		t = t->next;
-	}
-
-	refresh();
-
-	return list->size;
-}
-
-static void
+/*static void
 shell()
 {
 	int c,n;
@@ -135,18 +100,29 @@ shell()
 		attron(COLOR_PAIR(RED_WHITE)); addstr("In valid command"); attroff(COLOR_PAIR(RED_WHITE)); refresh(); napms(500);
 
 	}
-}
+}*/
 
 static void 
 main_event(int c)
 {
-	switch(c)
+	if(is_screen_resize())
 	{
-		case KEY_DOWN: case _KEY_J: go_next_buck(&bucks); break;
-		case KEY_UP: case _KEY_K: go_prev_buck(&bucks); break;
-		case _KEY_ENTER: toggle_is_extended(bucks.selected); break;
-		case _CHAR_COLON: shell(); break;
-		default: break;
+		erase(); refresh(); move(0,0);
+	}
+
+	event_buck_list(&bucks,c);
+	event_buck_list(&ab,c);
+
+
+	if(c == KEY_RIGHT)
+	{
+		bucks.focus = false;
+		ab.focus =true;
+	}
+	else if(c == KEY_LEFT)
+	{
+		bucks.focus = true;
+		ab.focus = false;
 	}
 }
 
@@ -163,23 +139,30 @@ init_gui()
 
 	gui_init_color();
 
-	bucks = create_buck_list(20);
+	create_buck_list(&bucks,20,20,5,5,"FOO");
+	bucks.focus = true;
+		
+	create_buck_list(&ab,20,25,5,40,"HELIOS");
 }
 
 void 
 run()
 {
-	do{
+
+	do{		
+
 		main_event(ec);	
 
-		//clear(); move(0,0);
-		erase(); move(0,0);
+		refresh();
 
 		show_buck_list(&bucks);
+		show_buck_list(&ab);
 
 		if(is_debug)
 			print_screen_info();
 
+		screen_height = LINES;
+		screen_width = COLS;
 
 	}while(ec != _CHAR_ESC && (ec = getch()) != 'q' );
 }

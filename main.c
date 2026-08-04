@@ -9,13 +9,21 @@ int main(int argc,char *argv[])
 
 	init_gui();
 
-	for(int i = 0;i < 10;i++)
+	for(int i = 0;i < 50;i++)
 	{
 		*name = '\0';
 		snprintf(num,128,"%d",i);
 		mystrcat(name,"buck-",num,NULL);
 		
 		push_buck_to_list(&bucks,name);
+	}
+	for(int i = 0;i < 50;i++)
+	{
+		*name = '\0';
+		snprintf(num,128,"%d",i);
+		mystrcat(name,"FONTO-",num,NULL);
+		
+		push_buck_to_list(&ab,name);
 	}
 
 	run();

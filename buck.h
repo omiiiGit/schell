@@ -1,9 +1,12 @@
 #ifndef BUCK_H
 #define BUCK_H
 
+#define _XOPEN_SOURCE_EXTENDED 1
 #include <stdlib.h>
 #include <string.h>
 #include <ncurses.h>
+#include "controls.h"
+#include "color.h"
 
 struct buck_t
 {
@@ -20,6 +23,10 @@ struct buck_list_t
 	struct buck_t *tail;
 	struct buck_t *selected;
 
+	WINDOW *win;
+	const char *name;
+	bool focus;
+
 	struct buck_t *start_buck;
 
 	int lines;
@@ -27,11 +34,13 @@ struct buck_list_t
 	size_t size;
 };
 
-struct buck_list_t create_buck_list(int lines);
+void create_buck_list(struct buck_list_t *self,int lines,int w,int y,int x,const char *name);
 void push_buck_to_list(struct buck_list_t *list, char *name);
 int free_buck_list(struct buck_list_t *list);
+void event_buck_list(struct buck_list_t *self,int c);
 void go_next_buck(struct buck_list_t *list);
 void go_prev_buck(struct buck_list_t *list);
+size_t show_buck_list(struct buck_list_t *list);
 void toggle_is_extended(struct buck_t *buck);
 
 
