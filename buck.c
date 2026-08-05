@@ -22,6 +22,28 @@ shell()
 
 }
 
+static void
+toggle_is_extended(struct buck_t *buck)
+{
+	buck->is_extended = (buck->is_extended) ? false : true;
+}
+
+static void
+show_scroll_bar(struct buck_list_t *self, int w_width)
+{
+	int w_height,i,scroll_len;
+
+	scroll_len = self->lines - 1;
+
+	for(i = 0,w_height = 1;i < scroll_len ;i++,w_height++)
+	{
+		mvwaddch(self->win,w_height,w_width,' ' | A_STANDOUT);
+	}
+
+	//wrefresh(self->win);
+}
+
+
 void
 create_buck_list(struct buck_list_t *self,int lines,int w, int y, int x,const char *name)
 {
@@ -37,6 +59,7 @@ create_buck_list(struct buck_list_t *self,int lines,int w, int y, int x,const ch
 		.name = name,
 		.win = NULL,
 		.pos = 0,
+		.e_pos = 0,
 	};
 
 	self->win = newwin(lines+1,w,y,x);
@@ -89,52 +112,117 @@ free_buck_list(struct buck_list_t *list)
 	return i;
 }
 
-void 
+void
 go_next_buck(struct buck_list_t *list)
 {
-	bool change = false;	
-
 	list->selected->is_selected = false;
 	list->selected->is_extended = false;
 
 	if(list->selected->next == NULL)
 	{
-		list->selected = list->start_buck = list->tail;
-		list->selected->is_selected = true;
-
+		list->start_buck = list->tail;
 		list->pos = 0;
+		list->e_pos = 0;
+
+		list->selected = list->start_buck;
+		list->selected->is_selected = true;
 
 		return;
 	}
 
-	if(list->pos >= list->lines - 2)
+	int i;
+
+	i = 0;
+
+	if(list->pos == list->lines - 2)
 	{
-		list->start_buck = list->selected->next;
-		change = true;
+		list->pos = 0;
+
+		while(list->start_buck != NULL && i < list->lines - 1)
+		{
+			list->start_buck = list->start_buck->next;
+			i++;
+		}
+
+		goto skip_pos_next;
 	}
 
+	list->pos++;
 
+skip_pos_next:
 	list->selected = list->selected->next;
 	list->selected->is_selected = true;
-	list->pos = (change) ? 0 : list->pos + 1;
+	list->e_pos++;
+
 }
 
-size_t 
+void 
+go_prev_buck(struct buck_list_t *list)
+{
+	list->selected->is_selected = false;
+	list->selected->is_extended = false;
+
+	if(list->selected->prev == NULL)
+	{		
+		list->selected = list->head;
+		list->selected->is_selected = true;
+
+		struct buck_t *b = list->head;
+		
+		int foo = list->size % (list->lines - 1);
+
+		foo = (foo == 0) ? list->lines - 1 : foo;
+
+		for(int i = 0;i < foo - 1;i++)
+		{
+			b = b->prev;
+		}
+		list->start_buck = b;
+
+		list->pos = --foo;
+		list->e_pos = list->size - 1;
+
+		return;	
+
+	}
+
+	int i;
+
+	i = 0;
+
+	if(list->pos == 0)
+	{
+		list->pos = list->lines - 2;
+
+		while(list->start_buck != NULL && i < list->lines - 1)
+		{
+			list->start_buck = list->start_buck->prev;
+			i++;
+		}
+
+		goto skip_pos_prev;
+	}
+
+	list->pos--;
+
+skip_pos_prev:
+
+	list->selected = list->selected->prev;
+	list->selected->is_selected = true;
+	list->e_pos--;
+
+}
+
+size_t
 show_buck_list(struct buck_list_t *list)
 {
-	if(list->size == 0)
-		return 0;
-
 	werase(list->win); wmove(list->win,0,0);
 
-	struct buck_t *t;
+	int y,x,foo,offset_len,w_width,w_height;
+	struct buck_t *t = NULL;
 
-	int y,x,foo,offset_len;
-	int w_width,w_height;
-
-	y = x = 0;
+	y = x = offset_len = 0;
 	foo = 1;
-
 	t = list->start_buck;
 	getmaxyx(list->win,w_height,w_width);
 
@@ -172,6 +260,8 @@ show_buck_list(struct buck_list_t *list)
 
 	wattron(list->win,border_attr | A_BOLD); box(list->win,0,0); wattroff(list->win,border_attr | A_BOLD);
 	wattron(list->win,A_BOLD); mvwprintw(list->win,0,((w_width - strlen(list->name) - 1/2)/2),list->name); wattroff(list->win,A_BOLD);
+	show_scroll_bar(list,w_width - 2);
+	
 	wrefresh(list->win);
 
 	return list->size;
@@ -194,56 +284,5 @@ event_buck_list(struct buck_list_t *self,int c)
 
 }
 
-void 
-go_prev_buck(struct buck_list_t *list)
-{
-	bool change = false;	
 
-	list->selected->is_selected = false;
-	list->selected->is_extended = false;
-
-	if(list->selected->prev == NULL)
-	{
-		list->selected = list->head;
-		list->selected->is_selected = true;
-
-		struct buck_t *b = list->head;
-		
-		int foo = (list->size % list->lines == 0) ? list->lines : list->size % list->lines;
-
-		for(int i = 0;i < foo - 1;i++)
-		{
-			b = b->prev;
-		}
-		list->start_buck = b;
-
-		list->pos = foo - 2;
-
-		return;	
-	}
-
-	if(list->pos == 0)
-	{
-		struct buck_t *buck = NULL; int i = 0;
-		for(buck = list->selected; i <= list->lines - 1; i++)
-		{
-			if(buck->prev != NULL)
-				buck = buck->prev;
-		}
-		list->start_buck = buck;
-
-		change = true;
-	}
-	
-
-	list->selected = list->selected->prev;
-	list->selected->is_selected = true;
-	list->pos = (change) ? list->lines - 1 : list->pos - 1;
-}
-
-void
-toggle_is_extended(struct buck_t *buck)
-{
-	buck->is_extended = (buck->is_extended) ? false : true;
-}
 

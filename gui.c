@@ -23,8 +23,10 @@ print_screen_info()
 	mvaddstr(1,COLS-strlen(buffer),buffer);
 	sprintf(buffer,"buffer -> %s",BUFFER);
 	mvaddstr(2,COLS-strlen(buffer),buffer);
-	sprintf(buffer,"List screen pos -> %d",bucks.pos);
+	sprintf(buffer,"buck pos -> %d",bucks.pos);
 	mvaddstr(3,COLS-strlen(buffer),buffer);
+	sprintf(buffer,"buck element pos -> %d",bucks.e_pos);
+	mvaddstr(4,COLS-strlen(buffer),buffer);
 	attroff(A_STANDOUT);
 
 	move(0,0);
@@ -113,7 +115,6 @@ main_event(int c)
 	event_buck_list(&bucks,c);
 	event_buck_list(&ab,c);
 
-
 	if(c == KEY_RIGHT)
 	{
 		bucks.focus = false;
@@ -139,7 +140,7 @@ init_gui()
 
 	gui_init_color();
 
-	create_buck_list(&bucks,20,20,5,5,"FOO");
+	create_buck_list(&bucks,10,20,5,5,"FOO");
 	bucks.focus = true;
 		
 	create_buck_list(&ab,20,25,5,40,"HELIOS");
@@ -173,4 +174,5 @@ free_gui()
 	endwin();
 
 	free_buck_list(&bucks);
+	free_buck_list(&ab);
 }

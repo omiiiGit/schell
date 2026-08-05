@@ -9,7 +9,7 @@ int main(int argc,char *argv[])
 
 	init_gui();
 
-	for(int i = 0;i < 50;i++)
+	for(int i = 0;i < 25;i++)
 	{
 		*name = '\0';
 		snprintf(num,128,"%d",i);
