@@ -5,7 +5,6 @@
 #include <ncurses.h>
 #include <stdbool.h>
 #include <locale.h>
-#include <outils.h>
 #include "color.h"
 #include "buck.h"
 #include "controls.h"

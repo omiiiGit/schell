@@ -1,7 +1,6 @@
 #include "gui.h"
 
 struct buck_list_t bucks;
-struct buck_list_t ab;
 
 bool is_shell_executed = false;
 bool is_debug = true;
@@ -113,18 +112,7 @@ main_event(int c)
 	}
 
 	event_buck_list(&bucks,c);
-	event_buck_list(&ab,c);
 
-	if(c == KEY_RIGHT)
-	{
-		bucks.focus = false;
-		ab.focus =true;
-	}
-	else if(c == KEY_LEFT)
-	{
-		bucks.focus = true;
-		ab.focus = false;
-	}
 }
 
 void
@@ -140,10 +128,9 @@ init_gui()
 
 	gui_init_color();
 
-	create_buck_list(&bucks,10,20,5,5,"FOO");
+	create_buck_list(&bucks,10,15,1,1,"BUCKS");
 	bucks.focus = true;
-		
-	create_buck_list(&ab,20,25,5,40,"HELIOS");
+
 }
 
 void 
@@ -154,10 +141,10 @@ run()
 
 		main_event(ec);	
 
+		//box(stdscr,0,0);
 		refresh();
 
 		show_buck_list(&bucks);
-		show_buck_list(&ab);
 
 		if(is_debug)
 			print_screen_info();
@@ -174,5 +161,4 @@ free_gui()
 	endwin();
 
 	free_buck_list(&bucks);
-	free_buck_list(&ab);
 }

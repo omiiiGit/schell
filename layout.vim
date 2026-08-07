@@ -129,7 +129,7 @@ badd +1 buffer.c
 badd +1 color.h
 badd +1 makefile
 badd +1 gui.h
-badd +0 controls.h
+badd +1 controls.h
 argglobal
 %argdel
 $argadd main.c
@@ -2017,6 +2017,7 @@ inoremap <buffer> <silent> § =AutoPairsMoveCharacter('''')
 inoremap <buffer> <silent> ¢ =AutoPairsMoveCharacter('"')
 inoremap <buffer> <silent> © =AutoPairsMoveCharacter(')')
 inoremap <buffer> <silent> ¨ =AutoPairsMoveCharacter('(')
+inoremap <buffer> <silent> Û =AutoPairsMoveCharacter('[')
 inoremap <buffer> <silent> î :call AutoPairsJump()a
 inoremap <buffer> <silent> <expr> ð AutoPairsToggle()
 inoremap <buffer> <silent> â =AutoPairsBackInsert()
@@ -2191,7 +2192,7 @@ keepjumps exe s:l
 normal! zt
 keepjumps 11
 normal! 0
-tabnext 7
+tabnext 1
 set stal=1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0
   silent exe 'bwipe ' . s:wipebuf

@@ -1,6 +1,6 @@
 CC = gcc
-CFLAGS = -g -Wall -I/home/om/include
-LDFLAGS = -lncurses -loutils
+CFLAGS = -g -Wall
+LDFLAGS = -lncurses
 
 PROG = schell
 

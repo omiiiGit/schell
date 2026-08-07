@@ -2,6 +2,7 @@
 
 static wchar_t UPTRI[] =  L"\u25B6"; 
 static wchar_t DOTRI[]  = L"\u25BC"; 
+//static wchar_t NETBAR[] = L"\u1FB90";
 
 static struct buck_t
 *create_buck_t(char *name)
@@ -10,6 +11,8 @@ static struct buck_t
 
 	buck->next = buck->prev = NULL;
 	buck->is_extended = buck->is_selected = false;
+
+	buck->index = 0;
 
 	strcpy(buck->name,name);
 
@@ -31,16 +34,22 @@ toggle_is_extended(struct buck_t *buck)
 static void
 show_scroll_bar(struct buck_list_t *self, int w_width)
 {
-	int w_height,i,scroll_len;
+	int w_height,i,scroll_len,scroll_pos;
 
 	scroll_len = self->lines - 1;
 
+	int percentage = (self->e_pos  * 100) / self->size ;
+	scroll_pos = (scroll_len * percentage) / 100;	
+
 	for(i = 0,w_height = 1;i < scroll_len ;i++,w_height++)
 	{
-		mvwaddch(self->win,w_height,w_width,' ' | A_STANDOUT);
+		if(i == scroll_pos)
+		{
+			wattron(self->win,COLOR_PAIR(RED_BLACK)); mvwaddwstr(self->win,w_height,w_width,L"🮐"); wattroff(self->win,COLOR_PAIR(RED_BLACK));
+		}
+		else
+			mvwaddch(self->win,w_height,w_width,ACS_VLINE);
 	}
-
-	//wrefresh(self->win);
 }
 
 
@@ -56,6 +65,7 @@ create_buck_list(struct buck_list_t *self,int lines,int w, int y, int x,const ch
 		.lines = lines,
 		.size = 0,
 		.focus = false,
+		.hide = false,
 		.name = name,
 		.win = NULL,
 		.pos = 0,
@@ -89,6 +99,7 @@ push_buck_to_list(struct buck_list_t *list,char *name)
 	else 
 	{
 		buck->prev = list->head;
+		buck->index = buck->prev->index + 1;
 		list->head->next = buck;
 		list->head = buck;
 	}
@@ -179,7 +190,7 @@ go_prev_buck(struct buck_list_t *list)
 		}
 		list->start_buck = b;
 
-		list->pos = --foo;
+		list->pos = foo - 1;
 		list->e_pos = list->size - 1;
 
 		return;	
@@ -216,8 +227,12 @@ skip_pos_prev:
 size_t
 show_buck_list(struct buck_list_t *list)
 {
-	werase(list->win); wmove(list->win,0,0);
 
+	if(list->hide)
+		return 0;
+
+	werase(list->win); wmove(list->win,0,0);
+	
 	int y,x,foo,offset_len,w_width,w_height;
 	struct buck_t *t = NULL;
 
@@ -242,27 +257,40 @@ show_buck_list(struct buck_list_t *list)
 			offset_len = (w_width - 2) - strlen(t->name);
 
 			wattron(list->win,flag); 
-			waddwstr(list->win,triangle); wprintw(list->win," %s",t->name);
+
+			waddwstr(list->win,triangle);
+			
+			wprintw(list->win," %s",t->name);
+
 		   	for(int i = 0;i < offset_len;i++)
 				waddch(list->win,' ');
 			waddch(list->win,'\n');
 			wattroff(list->win,flag); 
 			
 		}
-		else 
-			wprintw(list->win,"%s\n",t->name);
-		foo++;
-
+		else	
+		{
+			wprintw(list->win,"%d %s\n",t->index,t->name);
+		}
 		t = t->next;
+		foo++;
 	}
 
 	chtype border_attr = (list->focus) ? COLOR_PAIR(GREEN_BLACK) : COLOR_PAIR(YELLOW_BLACK);
 
 	wattron(list->win,border_attr | A_BOLD); box(list->win,0,0); wattroff(list->win,border_attr | A_BOLD);
-	wattron(list->win,A_BOLD); mvwprintw(list->win,0,((w_width - strlen(list->name) - 1/2)/2),list->name); wattroff(list->win,A_BOLD);
+
+	char *sn = NULL;
+	asprintf(&sn,"%s",list->name);
+
+	wattron(list->win,A_BOLD); mvwprintw(list->win,0,((w_width - strlen(sn) - 1/2)/2),"%s",sn); wattroff(list->win,A_BOLD);
+
+	free(sn);
+
 	show_scroll_bar(list,w_width - 2);
 	
 	wrefresh(list->win);
+
 
 	return list->size;
 }
@@ -277,8 +305,11 @@ event_buck_list(struct buck_list_t *self,int c)
 	{
 		case KEY_DOWN: case _KEY_J: go_next_buck(self); break;
 		case KEY_UP: case _KEY_K: go_prev_buck(self); break;
-		case _KEY_ENTER: toggle_is_extended(self->selected); break;
+		case _KEY_ENTER:
+					toggle_is_extended(self->selected); 
+		break;
 		case _CHAR_COLON: shell(); break;
+		//case _KEY_H: self->hide = true; clear();break;
 		default: break;
 	}
 

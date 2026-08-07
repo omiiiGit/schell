@@ -6,6 +6,7 @@
 #include <string.h>
 #include <ncurses.h>
 #include "controls.h"
+#include "buffer.h"
 #include "color.h"
 
 struct buck_t
@@ -15,6 +16,7 @@ struct buck_t
 
 	struct buck_t *next;
 	struct buck_t *prev;
+	int index;
 };
 
 struct buck_list_t
@@ -28,6 +30,7 @@ struct buck_list_t
 	const char *name;
 
 	bool focus;
+	bool hide;
 
 	int lines;
 	int pos;

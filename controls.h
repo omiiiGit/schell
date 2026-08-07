@@ -6,6 +6,7 @@
 #define _KEY_ESC 27
 #define _KEY_J 'j'
 #define _KEY_K 'k'
+#define _KEY_H 'h'
 #define _CHAR_COLON ':'
 #define _CHAR_ESC 27
 
