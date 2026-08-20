@@ -4,18 +4,18 @@ LDFLAGS = -lncurses
 
 PROG = schell
 
-OBJ = main.o gui.o buck.o buffer.o utils.o
+OBJ = main.o gui.o buck.o buffer.o utils.o textbar.o
 
 .PHONY: build
 build: $(PROG)
 
 $(PROG): $(OBJ)
-	$(CC) $(CFLAGS) -o $(PROG) $(OBJ) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 main.o: main.c gui.h utils.h
 	$(CC) -c $(CFLAGS) main.c
 
-gui.o: gui.c gui.h color.h buck.h controls.h
+gui.o: gui.c gui.h color.h buck.h controls.h textbar.h
 	$(CC) -c $(CFLAGS) gui.c
 
 buck.o: buck.c buck.h controls.h
@@ -26,6 +26,9 @@ buffer.o: buffer.h buffer.c
 
 utils.o: utils.c utils.h
 	$(CC) -c $(CFLAGS) utils.c
+
+textbar.o: textbar.c textbar.h
+	$(CC) -c $(CFLAGS) textbar.c
 
 .PHONY: clean
 clean:

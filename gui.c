@@ -1,10 +1,12 @@
 #include "gui.h"
 
 struct buck_list_t bucks;
+Textbar *textbar = NULL;
 
 bool is_shell_executed = false;
 bool is_debug = true;
 int ec = -1;
+
 
 static int screen_width;
 static int screen_height;
@@ -44,6 +46,9 @@ gui_init_color()
 {
 	start_color();
 
+	init_color(DWHITE,1000,1000,1000);
+	init_color(DBLUE,0,0,1000);
+
 	//initializing colors from CREATE_COLORS_FOR macro
 	
 	CREATE_COLORS_FOR(BLACK)
@@ -54,6 +59,10 @@ gui_init_color()
 	CREATE_COLORS_FOR(MAGENTA)
 	CREATE_COLORS_FOR(CYAN)
 	CREATE_COLORS_FOR(WHITE)
+
+	init_pair(DWHITE_DBLUE,DWHITE,DBLUE);
+	init_pair(DBLUE_DWHITE,DBLUE,DWHITE);
+
 }
 #undef X
 
@@ -113,6 +122,14 @@ main_event(int c)
 
 	event_buck_list(&bucks,c);
 
+	if (c == _CHAR_COLON) {
+		mvaddch(LINES-1,0,':' | COLOR_PAIR(DWHITE_DBLUE));
+		refresh();
+		draw_textbar(textbar);
+		mvaddch(LINES-1,0,' ' | COLOR_PAIR(BLACK_BLACK));	
+		refresh();
+	}
+
 }
 
 void
@@ -131,6 +148,8 @@ init_gui()
 	create_buck_list(&bucks,10,15,1,1,"BUCKS");
 	bucks.focus = true;
 
+	textbar = create_textbar(stdscr,COLS-1,1,LINES-1,COLOR_PAIR(DWHITE_DBLUE),COLOR_PAIR(DBLUE_DWHITE));
+
 }
 
 void 
@@ -141,7 +160,6 @@ run()
 
 		main_event(ec);	
 
-		//box(stdscr,0,0);
 		refresh();
 
 		show_buck_list(&bucks);

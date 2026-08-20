@@ -13,10 +13,14 @@
 	X(WHITE,color)
 
 
+typedef enum {
+	DWHITE = 100,
+	DBLUE,
+}GUI_COLOR;	
+
 #define X(first,second) \
 	first##_##second,
-typedef enum
-{
+typedef enum {
 	CREATE_COLORS_FOR(BLACK)
 	CREATE_COLORS_FOR(RED)
 	CREATE_COLORS_FOR(GREEN)
@@ -25,7 +29,9 @@ typedef enum
 	CREATE_COLORS_FOR(MAGENTA)
 	CREATE_COLORS_FOR(CYAN)
 	CREATE_COLORS_FOR(WHITE)
-}GUI_COLOR;
+	DBLUE_DWHITE,
+	DWHITE_DBLUE,
+}GUI_COLOR_PAIR;
 #undef X
 
 #endif
