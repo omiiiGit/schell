@@ -1,9 +1,10 @@
 #include "textbar.h"
-
+#include "widgets.h"
 
 static
 void addch_textbar(Textbar *self,int pos,int ch)
 {
+
 	char *buffer = self->buffer;
 
 	if (pos > strlen(buffer) || pos < 0)
@@ -47,7 +48,8 @@ Textbar
 		.x = x,.y = y,
 		.curs_pos = 0,
 		.start_pos = 0,
-		.win = derwin(parent,1,w,y,x),
+		//.win = derwin(parent,1,w,y,x),
+		.win = newwin(1,w,y,x),
 		.bar_color = bar_color,
 		.curs_color = curs_color,
 	};
@@ -59,6 +61,8 @@ Textbar
 	}
 
 	keypad(self->win,TRUE);
+	wbkgd(self->win,self->bar_color);
+	wbkgdset(self->win,self->bar_color);
 
 	return self;
 }
@@ -68,7 +72,6 @@ draw_textbar(Textbar *self)
 {
 	int c;
 
-
 	for (int i = 0;i < BUFFSIZE;i++)
 		self->buffer[i] = '\0';
 
@@ -76,6 +79,7 @@ draw_textbar(Textbar *self)
 	self->start_pos = 0;
 
 	wbkgd(self->win,self->bar_color);
+
 	curs_set(1);
 
 	while ((c = wgetch(self->win)) != '\n') {
@@ -102,6 +106,10 @@ draw_textbar(Textbar *self)
 			goto render;
 		}
 		else if (c == KEY_BACKSPACE) {
+
+			if (self->curs_pos == 0)
+				goto render;
+
 			if (self->curs_pos >= (int)self->w) {
 				self->start_pos--;
 			}
@@ -111,6 +119,17 @@ draw_textbar(Textbar *self)
 			goto render;
 
 		}
+		else if (c == KEY_RESIZE) {
+
+			REDRAW_WIDGETS();
+
+			wresize(self->win,1,self->w);
+
+			self->w = COLS - 1;
+			self->y = LINES - 1;
+
+			goto render;
+		}
 
 		addch_textbar(self,self->curs_pos++,c);
 
@@ -119,6 +138,12 @@ draw_textbar(Textbar *self)
 		}
 
 render:
+		if (c == KEY_RESIZE) {
+			mvaddch(LINES-1,0,':' | COLOR_PAIR(DWHITE_DBLUE));
+			refresh();
+			touchwin(self->win);
+		}
+
 		curs_set((self->curs_pos >= (int)strlen(self->buffer)) ? 1 : 0);
 
 		for (int i = self->start_pos; i < self->start_pos + self->w && self->buffer[i] != '\0'; i++) {
@@ -131,6 +156,8 @@ render:
 		}
 		wrefresh(self->win);
 	}
+
+	curs_set(0);
 
 	wbkgd(self->win,COLOR_PAIR(BLACK_BLACK));
 	werase(self->win);

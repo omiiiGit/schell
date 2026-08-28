@@ -15,7 +15,7 @@ $(PROG): $(OBJ)
 main.o: main.c gui.h utils.h
 	$(CC) -c $(CFLAGS) main.c
 
-gui.o: gui.c gui.h color.h buck.h controls.h textbar.h
+gui.o: gui.c gui.h color.h buck.h controls.h textbar.h widgets.h
 	$(CC) -c $(CFLAGS) gui.c
 
 buck.o: buck.c buck.h controls.h
@@ -27,7 +27,7 @@ buffer.o: buffer.h buffer.c
 utils.o: utils.c utils.h
 	$(CC) -c $(CFLAGS) utils.c
 
-textbar.o: textbar.c textbar.h
+textbar.o: textbar.c textbar.h widgets.h
 	$(CC) -c $(CFLAGS) textbar.c
 
 .PHONY: clean

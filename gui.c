@@ -1,18 +1,19 @@
 #include "gui.h"
+#include "widgets.h"
 
-struct buck_list_t bucks;
+//struct buck_list_t bucks;
+struct buck_list_t *bucks;
 Textbar *textbar = NULL;
 
 bool is_shell_executed = false;
 bool is_debug = true;
 int ec = -1;
 
-
 static int screen_width;
 static int screen_height;
 
-static void
-print_screen_info()
+void
+print_screen_info(void)
 {
 	char buffer[BUFFSIZE];
 
@@ -20,21 +21,23 @@ print_screen_info()
 	//sprintf(buffer,"Screen -> %d x %d",COLS,LINES);
 	sprintf(buffer,"Screen -> %d x %d",screen_height,screen_width);
 	mvaddstr(0,COLS-strlen(buffer),buffer);
-	sprintf(buffer,"Number of bucks-> %ld",bucks.size);
+	sprintf(buffer,"Number of bucks-> %ld",bucks->size);
 	mvaddstr(1,COLS-strlen(buffer),buffer);
 	sprintf(buffer,"buffer -> %s",BUFFER);
 	mvaddstr(2,COLS-strlen(buffer),buffer);
-	sprintf(buffer,"buck pos -> %d",bucks.pos);
+	sprintf(buffer,"buck pos -> %d",bucks->pos);
 	mvaddstr(3,COLS-strlen(buffer),buffer);
-	sprintf(buffer,"buck element pos -> %d",bucks.e_pos);
+	sprintf(buffer,"buck element pos -> %d",bucks->e_pos);
 	mvaddstr(4,COLS-strlen(buffer),buffer);
 	attroff(A_STANDOUT);
+
+	refresh();
 
 	move(0,0);
 }
 
 static bool
-is_screen_resize()
+is_screen_resize(void)
 {
 	return (screen_height != LINES || screen_width != COLS) ? true : false;
 }
@@ -42,7 +45,7 @@ is_screen_resize()
 #define X(first,second) \
 	init_pair(first##_##second,COLOR_##first,COLOR_##second);
 static void
-gui_init_color()
+gui_init_color(void)
 {
 	start_color();
 
@@ -115,12 +118,12 @@ shell()
 static void 
 main_event(int c)
 {
-	if(is_screen_resize())
-	{
+
+	if (c == KEY_RESIZE) {
 		erase(); refresh(); move(0,0);
 	}
 
-	event_buck_list(&bucks,c);
+	event_buck_list(bucks,c);
 
 	if (c == _CHAR_COLON) {
 		mvaddch(LINES-1,0,':' | COLOR_PAIR(DWHITE_DBLUE));
@@ -145,15 +148,20 @@ init_gui()
 
 	gui_init_color();
 
-	create_buck_list(&bucks,10,15,1,1,"BUCKS");
-	bucks.focus = true;
+	//getmaxyx(stdscr,screen_height,screen_width);
+	screen_height = LINES;
+	screen_width = COLS;
+
+	bucks = (struct buck_list_t*)malloc(sizeof(struct buck_list_t));
+	create_buck_list(bucks,10,15,1,1,"BUCKS");
+	bucks->focus = true;
 
 	textbar = create_textbar(stdscr,COLS-1,1,LINES-1,COLOR_PAIR(DWHITE_DBLUE),COLOR_PAIR(DBLUE_DWHITE));
 
 }
 
 void 
-run()
+run(void)
 {
 
 	do{		
@@ -162,7 +170,7 @@ run()
 
 		refresh();
 
-		show_buck_list(&bucks);
+		show_buck_list(bucks);
 
 		if(is_debug)
 			print_screen_info();
@@ -174,9 +182,10 @@ run()
 }
 
 void
-free_gui()
+free_gui(void)
 {
 	endwin();
 
-	free_buck_list(&bucks);
+	free_buck_list(bucks);
+	free(bucks);
 }

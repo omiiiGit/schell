@@ -46,6 +46,14 @@
 !_TAG_KIND_DESCRIPTION!Markdown	s,section	/sections/
 !_TAG_KIND_DESCRIPTION!Markdown	t,subsubsection	/level 3 sections/
 !_TAG_KIND_DESCRIPTION!Markdown	u,l5subsection	/level 5 sections/
+!_TAG_KIND_DESCRIPTION!Vim	C,constant	/constant definitions/
+!_TAG_KIND_DESCRIPTION!Vim	a,augroup	/autocommand groups/
+!_TAG_KIND_DESCRIPTION!Vim	c,command	/user-defined commands/
+!_TAG_KIND_DESCRIPTION!Vim	f,function	/function definitions/
+!_TAG_KIND_DESCRIPTION!Vim	k,class	/vim9script classes/
+!_TAG_KIND_DESCRIPTION!Vim	m,map	/maps/
+!_TAG_KIND_DESCRIPTION!Vim	n,filename	/vimball filename/
+!_TAG_KIND_DESCRIPTION!Vim	v,variable	/variable definitions/
 !_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
 !_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
 !_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
@@ -54,6 +62,7 @@
 !_TAG_PARSER_VERSION!C++	2.2	/current.age/
 !_TAG_PARSER_VERSION!Make	1.1	/current.age/
 !_TAG_PARSER_VERSION!Markdown	1.1	/current.age/
+!_TAG_PARSER_VERSION!Vim	1.1	/current.age/
 !_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
 !_TAG_PROC_CWD	/home/om/proj/schell/	//
 !_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
@@ -75,7 +84,95 @@
 !_TAG_ROLE_DESCRIPTION!C++!partition	imported	/imported with "imported ..."/
 !_TAG_ROLE_DESCRIPTION!Make!makefile	included	/included/
 !_TAG_ROLE_DESCRIPTION!Make!makefile	optional	/optionally included/
+"	layout.vim	/^inoremap <buffer> <silent> " =AutoPairsInsert('"')$/;"	m
 $(PROG)	makefile	/^$(PROG): $(OBJ)$/;"	t
+'	layout.vim	/^inoremap <buffer> <silent> ' =AutoPairsInsert('''')$/;"	m
+(	layout.vim	/^inoremap <buffer> <silent> ( =AutoPairsInsert('(')$/;"	m
+)	layout.vim	/^inoremap <buffer> <silent> ) =AutoPairsInsert(')')$/;"	m
+<BS>	layout.vim	/^inoremap <buffer> <silent> <BS> =AutoPairsDelete()$/;"	m
+<C-F>	layout.vim	/^nnoremap <C-F> :NERDTreeFind$/;"	m
+<C-G>	layout.vim	/^nnoremap <C-G> :Rg$/;"	m
+<C-H>	layout.vim	/^inoremap <buffer> <silent> <C-H> =AutoPairsDelete()$/;"	m
+<C-N>	layout.vim	/^nnoremap <C-N> :NERDTreeToggle$/;"	m
+<C-P>	layout.vim	/^nnoremap <C-P> :Files$/;"	m
+<C-Q>	layout.vim	/^nnoremap <C-Q> :qa!$/;"	m
+<C-S>	layout.vim	/^nnoremap <C-S> :w$/;"	m
+<C-T>	layout.vim	/^nnoremap <C-T> :Windows$/;"	m
+<F12>	layout.vim	/^nnoremap <F12> :FloatermToggle$/;"	m
+<M-">	layout.vim	/^inoremap <buffer> <silent> <M-"> =AutoPairsMoveCharacter('"')$/;"	m
+<M-'>	layout.vim	/^inoremap <buffer> <silent> <M-'> =AutoPairsMoveCharacter('''')$/;"	m
+<M-(>	layout.vim	/^inoremap <buffer> <silent> <M-(> =AutoPairsMoveCharacter('(')$/;"	m
+<M-)>	layout.vim	/^inoremap <buffer> <silent> <M-)> =AutoPairsMoveCharacter(')')$/;"	m
+<M-Left>	layout.vim	/^nnoremap <M-Left> :tabprev$/;"	m
+<M-Right>	layout.vim	/^nnoremap <M-Right> :tabnext$/;"	m
+<M-[>	layout.vim	/^inoremap <buffer> <silent> <M-[> =AutoPairsMoveCharacter('[')$/;"	m
+<M-]>	layout.vim	/^inoremap <buffer> <silent> <M-]> =AutoPairsMoveCharacter(']')$/;"	m
+<M-b>	layout.vim	/^inoremap <buffer> <silent> <M-b> =AutoPairsBackInsert()$/;"	m
+<M-e>	layout.vim	/^inoremap <buffer> <silent> <M-e> =AutoPairsFastWrap()$/;"	m
+<M-n>	layout.vim	/^inoremap <buffer> <silent> <M-n> :call AutoPairsJump()$/;"	m
+<M-n>	layout.vim	/^noremap <buffer> <silent> <M-n> :call AutoPairsJump()$/;"	m
+<M-p>	layout.vim	/^noremap <buffer> <silent> <M-p> :call AutoPairsToggle()$/;"	m
+<M-{>	layout.vim	/^inoremap <buffer> <silent> <M-{> =AutoPairsMoveCharacter('{')$/;"	m
+<M-}>	layout.vim	/^inoremap <buffer> <silent> <M-}> =AutoPairsMoveCharacter('}')$/;"	m
+<Plug>(fzf-insert)	layout.vim	/^nnoremap <silent> <Plug>(fzf-insert) i$/;"	m
+<Plug>(fzf-maps-i)	layout.vim	/^inoremap <silent> <Plug>(fzf-maps-i) :call fzf#vim#maps('i', 0)$/;"	m
+<Plug>(fzf-maps-n)	layout.vim	/^nnoremap <silent> <Plug>(fzf-maps-n) :call fzf#vim#maps('n', 0)$/;"	m
+<Plug>(fzf-maps-o)	layout.vim	/^onoremap <silent> <Plug>(fzf-maps-o) :call fzf#vim#maps('o', 0)$/;"	m
+<Plug>(fzf-maps-x)	layout.vim	/^xnoremap <silent> <Plug>(fzf-maps-x) :call fzf#vim#maps('x', 0)$/;"	m
+<Plug>(fzf-normal)	layout.vim	/^nnoremap <silent> <Plug>(fzf-normal) <Nop>$/;"	m
+<Plug>(lsp-call-hierarchy-incoming)	layout.vim	/^nnoremap <silent> <Plug>(lsp-call-hierarchy-incoming) :call lsp#ui#vim#call_hierarchy_incoming/;"	m
+<Plug>(lsp-call-hierarchy-outgoing)	layout.vim	/^nnoremap <silent> <Plug>(lsp-call-hierarchy-outgoing) :call lsp#ui#vim#call_hierarchy_outgoing/;"	m
+<Plug>(lsp-code-action)	layout.vim	/^nnoremap <silent> <Plug>(lsp-code-action) :call lsp#ui#vim#code_action({})$/;"	m
+<Plug>(lsp-code-action-float)	layout.vim	/^nnoremap <silent> <Plug>(lsp-code-action-float) :call lsp#ui#vim#code_action({ 'ui': 'float' }/;"	m
+<Plug>(lsp-code-action-preview)	layout.vim	/^nnoremap <silent> <Plug>(lsp-code-action-preview) :call lsp#ui#vim#code_action({ 'ui': 'previe/;"	m
+<Plug>(lsp-code-lens)	layout.vim	/^nnoremap <silent> <Plug>(lsp-code-lens) :call lsp#ui#vim#code_lens()$/;"	m
+<Plug>(lsp-declaration)	layout.vim	/^nnoremap <silent> <Plug>(lsp-declaration) :call lsp#ui#vim#declaration(0)$/;"	m
+<Plug>(lsp-definition)	layout.vim	/^nnoremap <silent> <Plug>(lsp-definition) :call lsp#ui#vim#definition(0)$/;"	m
+<Plug>(lsp-document-diagnostics)	layout.vim	/^nnoremap <silent> <Plug>(lsp-document-diagnostics) :call lsp#internal#diagnostics#document_dia/;"	m
+<Plug>(lsp-document-format)	layout.vim	/^nnoremap <silent> <Plug>(lsp-document-format) :call lsp#internal#document_formatting#format({ /;"	m
+<Plug>(lsp-document-format)	layout.vim	/^vnoremap <silent> <Plug>(lsp-document-format) :<Home>silent <End>call lsp#internal#document_rang/;"	m
+<Plug>(lsp-document-link)	layout.vim	/^nnoremap <silent> <Plug>(lsp-document-link) :call lsp#ui#vim#document_link()$/;"	m
+<Plug>(lsp-document-link-open)	layout.vim	/^nnoremap <silent> <Plug>(lsp-document-link-open) :call lsp#ui#vim#document_link_open()$/;"	m
+<Plug>(lsp-document-range-format)	layout.vim	/^nnoremap <silent> <Plug>(lsp-document-range-format) :set opfunc=lsp#internal#document_range_fo/;"	m
+<Plug>(lsp-document-range-format)	layout.vim	/^xnoremap <silent> <Plug>(lsp-document-range-format) :<Home>silent <End>call lsp#internal#documen/;"	m
+<Plug>(lsp-document-symbol)	layout.vim	/^nnoremap <silent> <Plug>(lsp-document-symbol) :call lsp#ui#vim#document_symbol()$/;"	m
+<Plug>(lsp-document-symbol-search)	layout.vim	/^nnoremap <silent> <Plug>(lsp-document-symbol-search) :call lsp#internal#document_symbol#search/;"	m
+<Plug>(lsp-hover)	layout.vim	/^nnoremap <silent> <Plug>(lsp-hover) :call lsp#internal#document_hover#under_cursor#do({})$/;"	m
+<Plug>(lsp-hover-float)	layout.vim	/^nnoremap <silent> <Plug>(lsp-hover-float) :call lsp#internal#document_hover#under_cursor#do({ /;"	m
+<Plug>(lsp-hover-preview)	layout.vim	/^nnoremap <silent> <Plug>(lsp-hover-preview) :call lsp#internal#document_hover#under_cursor#do(/;"	m
+<Plug>(lsp-implementation)	layout.vim	/^nnoremap <silent> <Plug>(lsp-implementation) :call lsp#ui#vim#implementation(0)$/;"	m
+<Plug>(lsp-next-diagnostic)	layout.vim	/^nnoremap <silent> <Plug>(lsp-next-diagnostic) :call lsp#internal#diagnostics#movement#_next_di/;"	m
+<Plug>(lsp-next-diagnostic-nowrap)	layout.vim	/^nnoremap <silent> <Plug>(lsp-next-diagnostic-nowrap) :call lsp#internal#diagnostics#movement#_/;"	m
+<Plug>(lsp-next-error)	layout.vim	/^nnoremap <silent> <Plug>(lsp-next-error) :call lsp#internal#diagnostics#movement#_next_error()/;"	m
+<Plug>(lsp-next-error-nowrap)	layout.vim	/^nnoremap <silent> <Plug>(lsp-next-error-nowrap) :call lsp#internal#diagnostics#movement#_next_/;"	m
+<Plug>(lsp-next-reference)	layout.vim	/^nnoremap <silent> <Plug>(lsp-next-reference) :call lsp#internal#document_highlight#jump(+1)$/;"	m
+<Plug>(lsp-next-warning)	layout.vim	/^nnoremap <silent> <Plug>(lsp-next-warning) :call lsp#internal#diagnostics#movement#_next_warni/;"	m
+<Plug>(lsp-next-warning-nowrap)	layout.vim	/^nnoremap <silent> <Plug>(lsp-next-warning-nowrap) :call lsp#internal#diagnostics#movement#_nex/;"	m
+<Plug>(lsp-peek-declaration)	layout.vim	/^nnoremap <silent> <Plug>(lsp-peek-declaration) :call lsp#ui#vim#declaration(1)$/;"	m
+<Plug>(lsp-peek-definition)	layout.vim	/^nnoremap <silent> <Plug>(lsp-peek-definition) :call lsp#ui#vim#definition(1)$/;"	m
+<Plug>(lsp-peek-implementation)	layout.vim	/^nnoremap <silent> <Plug>(lsp-peek-implementation) :call lsp#ui#vim#implementation(1)$/;"	m
+<Plug>(lsp-peek-type-definition)	layout.vim	/^nnoremap <silent> <Plug>(lsp-peek-type-definition) :call lsp#ui#vim#type_definition(1)$/;"	m
+<Plug>(lsp-preview-close)	layout.vim	/^nnoremap <silent> <Plug>(lsp-preview-close) :call lsp#ui#vim#output#closepreview()$/;"	m
+<Plug>(lsp-preview-focus)	layout.vim	/^nnoremap <silent> <Plug>(lsp-preview-focus) :call lsp#ui#vim#output#focuspreview()$/;"	m
+<Plug>(lsp-previous-diagnostic)	layout.vim	/^nnoremap <silent> <Plug>(lsp-previous-diagnostic) :call lsp#internal#diagnostics#movement#_pre/;"	m
+<Plug>(lsp-previous-diagnostic-nowrap)	layout.vim	/^nnoremap <silent> <Plug>(lsp-previous-diagnostic-nowrap) :call lsp#internal#diagnostics#moveme/;"	m
+<Plug>(lsp-previous-error)	layout.vim	/^nnoremap <silent> <Plug>(lsp-previous-error) :call lsp#internal#diagnostics#movement#_previous/;"	m
+<Plug>(lsp-previous-error-nowrap)	layout.vim	/^nnoremap <silent> <Plug>(lsp-previous-error-nowrap) :call lsp#internal#diagnostics#movement#_p/;"	m
+<Plug>(lsp-previous-reference)	layout.vim	/^nnoremap <silent> <Plug>(lsp-previous-reference) :call lsp#internal#document_highlight#jump(-1/;"	m
+<Plug>(lsp-previous-warning)	layout.vim	/^nnoremap <silent> <Plug>(lsp-previous-warning) :call lsp#internal#diagnostics#movement#_previo/;"	m
+<Plug>(lsp-previous-warning-nowrap)	layout.vim	/^nnoremap <silent> <Plug>(lsp-previous-warning-nowrap) :call lsp#internal#diagnostics#movement#/;"	m
+<Plug>(lsp-references)	layout.vim	/^nnoremap <silent> <Plug>(lsp-references) :call lsp#ui#vim#references({})$/;"	m
+<Plug>(lsp-rename)	layout.vim	/^nnoremap <silent> <Plug>(lsp-rename) :call lsp#ui#vim#rename({})$/;"	m
+<Plug>(lsp-signature-help)	layout.vim	/^nnoremap <silent> <Plug>(lsp-signature-help) :call lsp#ui#vim#signature_help#get_signature_hel/;"	m
+<Plug>(lsp-status)	layout.vim	/^nnoremap <silent> <Plug>(lsp-status) :echo lsp#get_server_status()$/;"	m
+<Plug>(lsp-type-definition)	layout.vim	/^nnoremap <silent> <Plug>(lsp-type-definition) :call lsp#ui#vim#type_definition(0)$/;"	m
+<Plug>(lsp-type-hierarchy)	layout.vim	/^nnoremap <silent> <Plug>(lsp-type-hierarchy) :call lsp#internal#type_hierarchy#show()$/;"	m
+<Plug>(lsp-workspace-symbol)	layout.vim	/^nnoremap <silent> <Plug>(lsp-workspace-symbol) :call lsp#ui#vim#workspace_symbol('')$/;"	m
+<Plug>(lsp-workspace-symbol-search)	layout.vim	/^nnoremap <silent> <Plug>(lsp-workspace-symbol-search) :call lsp#internal#workspace_symbol#sear/;"	m
+<Plug>(open-word-under-cursor)	layout.vim	/^nnoremap <Plug>(open-word-under-cursor) <ScriptCmd>vim9.Open(GetWordUnderCursor())$/;"	m
+<Plug>(open-word-under-cursor)	layout.vim	/^xnoremap <Plug>(open-word-under-cursor) <ScriptCmd>vim9.Open(getregion(getpos('v'), getpos('.'),/;"	m
+<SNR>42_AutoPairsReturn	layout.vim	/^inoremap <silent> <SNR>42_AutoPairsReturn =AutoPairsReturn()$/;"	m
+<SNR>43_AutoPairsReturn	layout.vim	/^inoremap <silent> <SNR>43_AutoPairsReturn =AutoPairsReturn()$/;"	m
 BLEN	controls.h	/^#define BLEN /;"	d
 BUCK_H	buck.h	/^#define BUCK_H$/;"	d
 BUFFER	buffer.c	/^char BUFFER[BUFFSIZE];$/;"	v	typeref:typename:char[]
@@ -85,19 +182,40 @@ CC	makefile	/^CC = gcc$/;"	m
 CFLAGS	makefile	/^CFLAGS = -g -Wall$/;"	m
 COLOR_H	color.h	/^#define COLOR_H /;"	d
 CONTROLS_H	controls.h	/^#define CONTROLS_H$/;"	d
-CREATE_COLORS_FOR	color.h	/^	CREATE_COLORS_FOR(BLACK)$/;"	e	enum:__anond352d99a0103
+CREATE_COLORS_FOR	color.h	/^	CREATE_COLORS_FOR(BLACK)$/;"	e	enum:__anond352d99a0203
 CREATE_COLORS_FOR	color.h	/^#define CREATE_COLORS_FOR(/;"	d
+DBLUE	color.h	/^	DBLUE,$/;"	e	enum:__anond352d99a0103
 DOTRI	buck.c	/^static wchar_t DOTRI[]  = L"\\u25BC"; $/;"	v	typeref:typename:wchar_t[]	file:
-GUI_COLOR	color.h	/^}GUI_COLOR;$/;"	t	typeref:enum:__anond352d99a0103
+DWHITE	color.h	/^	DWHITE = 100,$/;"	e	enum:__anond352d99a0103
+DWHITE_DBLUE	color.h	/^	DWHITE_DBLUE,$/;"	e	enum:__anond352d99a0203
+GUI_COLOR	color.h	/^}GUI_COLOR;	$/;"	t	typeref:enum:__anond352d99a0103
+GUI_COLOR_PAIR	color.h	/^}GUI_COLOR_PAIR;$/;"	t	typeref:enum:__anond352d99a0203
 GUI_H	gui.h	/^#define GUI_H /;"	d
 Its implemented using ncurses in C.	README.md	/^# Its implemented using ncurses in C. $/;"	c
 LDFLAGS	makefile	/^LDFLAGS = -lncurses$/;"	m
-OBJ	makefile	/^OBJ = main.o gui.o buck.o buffer.o utils.o$/;"	m
+OBJ	makefile	/^OBJ = main.o gui.o buck.o buffer.o utils.o textbar.o$/;"	m
 PROG	makefile	/^PROG = schell$/;"	m
+TEXTBAR_H	textbar.h	/^#define TEXTBAR_H$/;"	d
+Textbar	textbar.h	/^} Textbar;$/;"	t	typeref:struct:__anon1b801cb50108
 UPTRI	buck.c	/^static wchar_t UPTRI[] =  L"\\u25B6"; $/;"	v	typeref:typename:wchar_t[]	file:
 UTILS_H	utils.h	/^#define UTILS_H /;"	d
+WIDGETS_H	widgets.h	/^#define WIDGETS_H$/;"	d
 X	color.h	/^#define X(/;"	d
 X	gui.c	/^#define X(/;"	d	file:
+[	layout.vim	/^inoremap <buffer> <silent> [ =AutoPairsInsert('[')$/;"	m
+\\m	layout.vim	/^nnoremap \\m :noh$/;"	m
+\\n	layout.vim	/^nnoremap \\n :NERDTreeFocus$/;"	m
+\\t	layout.vim	/^nnoremap \\t :tabe$/;"	m
+\x16	layout.vim	/^inoremap <buffer> <silent>   =AutoPairsSpace()$/;"	m
+\x16\a	layout.vim	/^nnoremap  :Rg$/;"	m
+\x16\b	layout.vim	/^inoremap <buffer> <silent>  =AutoPairsDelete()$/;"	m
+\x16\x06	layout.vim	/^nnoremap  :NERDTreeFind$/;"	m
+\x16\x0E	layout.vim	/^nnoremap  :NERDTreeToggle$/;"	m
+\x16\x10	layout.vim	/^nnoremap  :Files$/;"	m
+\x16\x11	layout.vim	/^nnoremap  :qa!$/;"	m
+\x16\x13	layout.vim	/^nnoremap  :w$/;"	m
+\x16\x14	layout.vim	/^nnoremap  :Windows$/;"	m
+]	layout.vim	/^inoremap <buffer> <silent> ] =AutoPairsInsert(']')$/;"	m
 _CHAR_COLON	controls.h	/^#define _CHAR_COLON /;"	d
 _CHAR_ESC	controls.h	/^#define _CHAR_ESC /;"	d
 _KEY_ENTER	controls.h	/^#define _KEY_ENTER /;"	d
@@ -106,27 +224,43 @@ _KEY_H	controls.h	/^#define _KEY_H /;"	d
 _KEY_J	controls.h	/^#define _KEY_J /;"	d
 _KEY_K	controls.h	/^#define _KEY_K /;"	d
 _XOPEN_SOURCE_EXTENDED	buck.h	/^#define _XOPEN_SOURCE_EXTENDED /;"	d
-__anond352d99a0103	color.h	/^{$/;"	g
+__anon1b801cb50108	textbar.h	/^typedef struct {$/;"	s
+__anond352d99a0103	color.h	/^typedef enum {$/;"	g
+__anond352d99a0203	color.h	/^typedef enum {$/;"	g
+`	layout.vim	/^inoremap <buffer> <silent> ` =AutoPairsInsert('`')$/;"	m
+addch_textbar	textbar.c	/^void addch_textbar(Textbar *self,int pos,int ch)$/;"	f	typeref:typename:void	file:
+bar_color	textbar.h	/^	chtype bar_color;$/;"	m	struct:__anon1b801cb50108	typeref:typename:chtype
 buck.o	makefile	/^buck.o: buck.c buck.h controls.h$/;"	t
 buck_list_t	buck.h	/^struct buck_list_t$/;"	s
 buck_t	buck.h	/^struct buck_t$/;"	s
-bucks	gui.c	/^struct buck_list_t bucks;$/;"	v	typeref:struct:buck_list_t
+bucks	gui.c	/^struct buck_list_t *bucks;$/;"	v	typeref:struct:buck_list_t *
+buffer	textbar.h	/^	char buffer[BUFFSIZE];$/;"	m	struct:__anon1b801cb50108	typeref:typename:char[]
 buffer.o	makefile	/^buffer.o: buffer.h buffer.c$/;"	t
 build	makefile	/^build: $(PROG)$/;"	t
 clean	makefile	/^clean:$/;"	t
+cpo_save	layout.vim	/^var cpo_save: string$/;"	v	typeref:typename:string
 create_buck_list	buck.c	/^create_buck_list(struct buck_list_t *self,int lines,int w, int y, int x,const char *name)$/;"	f	typeref:typename:void
 create_buck_t	buck.c	/^*create_buck_t(char *name)$/;"	f	typeref:struct:buck_t *	file:
+create_textbar	textbar.c	/^*create_textbar(WINDOW *parent,int w,int x,int y,chtype bar_color,chtype curs_color)$/;"	f	typeref:typename:Textbar *
+curs_color	textbar.h	/^	chtype curs_color;$/;"	m	struct:__anon1b801cb50108	typeref:typename:chtype
+curs_pos	textbar.h	/^	int curs_pos;$/;"	m	struct:__anon1b801cb50108	typeref:typename:int
 debug	makefile	/^debug:$/;"	t
+delch_textbar	textbar.c	/^delch_textbar(Textbar *self,int pos)$/;"	f	typeref:typename:void	file:
+draw_textbar	textbar.c	/^draw_textbar(Textbar *self)$/;"	f	typeref:typename:void
 e_pos	buck.h	/^	int e_pos;$/;"	m	struct:buck_list_t	typeref:typename:int
 ec	gui.c	/^int ec = -1;$/;"	v	typeref:typename:int
 event_buck_list	buck.c	/^event_buck_list(struct buck_list_t *self,int c)$/;"	f	typeref:typename:void
 focus	buck.h	/^	bool focus;$/;"	m	struct:buck_list_t	typeref:typename:bool
 free_buck_list	buck.c	/^free_buck_list(struct buck_list_t *list)$/;"	f	typeref:typename:int
-free_gui	gui.c	/^free_gui()$/;"	f	typeref:typename:void
+free_gui	gui.c	/^free_gui(void)$/;"	f	typeref:typename:void
+free_textbar	textbar.c	/^free_textbar(Textbar *self)$/;"	f	typeref:typename:void
 go_next_buck	buck.c	/^go_next_buck(struct buck_list_t *list)$/;"	f	typeref:typename:void
 go_prev_buck	buck.c	/^go_prev_buck(struct buck_list_t *list)$/;"	f	typeref:typename:void
-gui.o	makefile	/^gui.o: gui.c gui.h color.h buck.h controls.h$/;"	t
-gui_init_color	gui.c	/^gui_init_color()$/;"	f	typeref:typename:void	file:
+gui.o	makefile	/^gui.o: gui.c gui.h color.h buck.h controls.h textbar.h widgets.h$/;"	t
+gui_init_color	gui.c	/^gui_init_color(void)$/;"	f	typeref:typename:void	file:
+gx	layout.vim	/^nmap gx <Plug>(open-word-under-cursor)$/;"	m
+gx	layout.vim	/^xmap gx <Plug>(open-word-under-cursor)$/;"	m
+h	textbar.h	/^	unsigned int x,y,w,h;$/;"	m	struct:__anon1b801cb50108	typeref:typename:unsigned int
 head	buck.h	/^	struct buck_t *head;$/;"	m	struct:buck_list_t	typeref:struct:buck_t *
 hide	buck.h	/^	bool hide;$/;"	m	struct:buck_list_t	typeref:typename:bool
 in systematic way, using CLI or TUI inteface.	README.md	/^# in systematic way, using CLI or TUI inteface.$/;"	c
@@ -134,9 +268,18 @@ index	buck.h	/^	int index;$/;"	m	struct:buck_t	typeref:typename:int
 init_gui	gui.c	/^init_gui()$/;"	f	typeref:typename:void
 is_debug	gui.c	/^bool is_debug = true;$/;"	v	typeref:typename:bool
 is_extended	buck.h	/^	bool is_extended,is_selected;$/;"	m	struct:buck_t	typeref:typename:bool
-is_screen_resize	gui.c	/^is_screen_resize()$/;"	f	typeref:typename:bool	file:
+is_screen_resize	gui.c	/^is_screen_resize(void)$/;"	f	typeref:typename:bool	file:
 is_selected	buck.h	/^	bool is_extended,is_selected;$/;"	m	struct:buck_t	typeref:typename:bool
 is_shell_executed	gui.c	/^bool is_shell_executed = false;$/;"	v	typeref:typename:bool
+l	layout.vim	/^  var l: number = 1 - ((0 * winheight(0) + 41) \/ 82)$/;"	v	typeref:typename:number
+l	layout.vim	/^  var l: number = 11 - ((10 * winheight(0) + 41) \/ 82)$/;"	v	typeref:typename:number
+l	layout.vim	/^  var l: number = 124 - ((18 * winheight(0) + 41) \/ 82)$/;"	v	typeref:typename:number
+l	layout.vim	/^  var l: number = 16 - ((15 * winheight(0) + 41) \/ 82)$/;"	v	typeref:typename:number
+l	layout.vim	/^  var l: number = 166 - ((0 * winheight(0) + 41) \/ 82)$/;"	v	typeref:typename:number
+l	layout.vim	/^  var l: number = 19 - ((18 * winheight(0) + 41) \/ 82)$/;"	v	typeref:typename:number
+l	layout.vim	/^  var l: number = 21 - ((20 * winheight(0) + 41) \/ 82)$/;"	v	typeref:typename:number
+l	layout.vim	/^  var l: number = 37 - ((36 * winheight(0) + 41) \/ 82)$/;"	v	typeref:typename:number
+l	layout.vim	/^  var l: number = 82 - ((6 * winheight(0) + 41) \/ 82)$/;"	v	typeref:typename:number
 lines	buck.h	/^	int lines;$/;"	m	struct:buck_list_t	typeref:typename:int
 main	main.c	/^int main(int argc,char *argv[])$/;"	f	typeref:typename:int
 main.o	makefile	/^main.o: main.c gui.h utils.h$/;"	t
@@ -147,21 +290,51 @@ name	buck.h	/^	const char *name;$/;"	m	struct:buck_list_t	typeref:typename:const
 next	buck.h	/^	struct buck_t *next;$/;"	m	struct:buck_t	typeref:struct:buck_t *
 pos	buck.h	/^	int pos;$/;"	m	struct:buck_list_t	typeref:typename:int
 prev	buck.h	/^	struct buck_t *prev;$/;"	m	struct:buck_t	typeref:struct:buck_t *
-print_screen_info	gui.c	/^print_screen_info()$/;"	f	typeref:typename:void	file:
+print_screen_info	gui.c	/^print_screen_info(void)$/;"	f	typeref:typename:void
 push_buck_to_list	buck.c	/^push_buck_to_list(struct buck_list_t *list,char *name)$/;"	f	typeref:typename:void
-run	gui.c	/^run()$/;"	f	typeref:typename:void
+run	gui.c	/^run(void)$/;"	f	typeref:typename:void
 run	makefile	/^run:$/;"	t
+save_splitbelow	layout.vim	/^var save_splitbelow: bool$/;"	v	typeref:typename:bool
+save_splitright	layout.vim	/^var save_splitright: bool$/;"	v	typeref:typename:bool
+save_winminheight	layout.vim	/^var save_winminheight: number$/;"	v	typeref:typename:number
+save_winminwidth	layout.vim	/^var save_winminwidth: number$/;"	v	typeref:typename:number
 schell is a daily logger for user, where user can store the daily logs off it	README.md	/^# schell is a daily logger for user, where user can store the daily logs off it $/;"	c
 screen_height	gui.c	/^static int screen_height;$/;"	v	typeref:typename:int	file:
 screen_width	gui.c	/^static int screen_width;$/;"	v	typeref:typename:int	file:
 selected	buck.h	/^	struct buck_t *selected;$/;"	m	struct:buck_list_t	typeref:struct:buck_t *
 shell	buck.c	/^shell()$/;"	f	typeref:typename:void	file:
+shortmess_save	layout.vim	/^var shortmess_save: string$/;"	v	typeref:typename:string
 show_buck_list	buck.c	/^show_buck_list(struct buck_list_t *list)$/;"	f	typeref:typename:size_t
 show_scroll_bar	buck.c	/^show_scroll_bar(struct buck_list_t *self, int w_width)$/;"	f	typeref:typename:void	file:
 size	buck.h	/^	size_t size;$/;"	m	struct:buck_list_t	typeref:typename:size_t
+so_save	layout.vim	/^const so_save: number = &g:so | const siso_save: number = &g:siso | setg so=0 siso=0 | setl so=-/;"	C	typeref:typename:number
 start_buck	buck.h	/^	struct buck_t *start_buck;$/;"	m	struct:buck_list_t	typeref:struct:buck_t *
+start_pos	textbar.h	/^	int start_pos;$/;"	m	struct:__anon1b801cb50108	typeref:typename:int
+sx	layout.vim	/^var sx: string = expand("<sfile>:p:r") .. "x.vim"$/;"	v	typeref:typename:string
 tail	buck.h	/^	struct buck_t *tail;$/;"	m	struct:buck_list_t	typeref:struct:buck_t *
+textbar	gui.c	/^Textbar *textbar = NULL;$/;"	v	typeref:typename:Textbar *
+textbar.o	makefile	/^textbar.o: textbar.c textbar.h widgets.h$/;"	t
 this is TUI + CLI implementation of schell	README.md	/^# this is TUI + CLI implementation of schell$/;"	c
 toggle_is_extended	buck.c	/^toggle_is_extended(struct buck_t *buck)$/;"	f	typeref:typename:void	file:
 utils.o	makefile	/^utils.o: utils.c utils.h$/;"	t
+w	textbar.h	/^	unsigned int x,y,w,h;$/;"	m	struct:__anon1b801cb50108	typeref:typename:unsigned int
 win	buck.h	/^	WINDOW *win;$/;"	m	struct:buck_list_t	typeref:typename:WINDOW *
+win	textbar.h	/^	WINDOW *win;$/;"	m	struct:__anon1b801cb50108	typeref:typename:WINDOW *
+wipebuf	layout.vim	/^var wipebuf: number = -1$/;"	v	typeref:typename:number
+x	textbar.h	/^	unsigned int x,y,w,h;$/;"	m	struct:__anon1b801cb50108	typeref:typename:unsigned int
+y	textbar.h	/^	unsigned int x,y,w,h;$/;"	m	struct:__anon1b801cb50108	typeref:typename:unsigned int
+{	layout.vim	/^inoremap <buffer> <silent> { =AutoPairsInsert('{')$/;"	m
+}	layout.vim	/^inoremap <buffer> <silent> } =AutoPairsInsert('}')$/;"	m
+¢	layout.vim	/^inoremap <buffer> <silent> ¢ =AutoPairsMoveCharacter('"')$/;"	m
+§	layout.vim	/^inoremap <buffer> <silent> § =AutoPairsMoveCharacter('''')$/;"	m
+¨	layout.vim	/^inoremap <buffer> <silent> ¨ =AutoPairsMoveCharacter('(')$/;"	m
+©	layout.vim	/^inoremap <buffer> <silent> © =AutoPairsMoveCharacter(')')$/;"	m
+Û	layout.vim	/^inoremap <buffer> <silent> Û =AutoPairsMoveCharacter('[')$/;"	m
+Ý	layout.vim	/^inoremap <buffer> <silent> Ý =AutoPairsMoveCharacter(']')$/;"	m
+â	layout.vim	/^inoremap <buffer> <silent> â =AutoPairsBackInsert()$/;"	m
+å	layout.vim	/^inoremap <buffer> <silent> å =AutoPairsFastWrap()$/;"	m
+î	layout.vim	/^inoremap <buffer> <silent> î :call AutoPairsJump()$/;"	m
+î	layout.vim	/^noremap <buffer> <silent> î :call AutoPairsJump()$/;"	m
+ð	layout.vim	/^noremap <buffer> <silent> ð :call AutoPairsToggle()$/;"	m
+û	layout.vim	/^inoremap <buffer> <silent> û =AutoPairsMoveCharacter('{')$/;"	m
+ý	layout.vim	/^inoremap <buffer> <silent> ý =AutoPairsMoveCharacter('}')$/;"	m

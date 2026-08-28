@@ -8,7 +8,7 @@ int main(int argc,char *argv[])
 
 	for(int i = 0;i < 100;i++)
 	{
-		push_buck_to_list(&bucks,"Buck");
+		push_buck_to_list(bucks,"Buck");
 	}
 
 	run();
