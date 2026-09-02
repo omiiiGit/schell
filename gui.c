@@ -2,15 +2,14 @@
 #include "widgets.h"
 
 //struct buck_list_t bucks;
-struct buck_list_t *bucks;
+struct buck_list_t *bucks = NULL;
 Textbar *textbar = NULL;
 
-bool is_shell_executed = false;
 bool is_debug = true;
-int ec = -1;
 
 static int screen_width;
 static int screen_height;
+static int ec;
 
 void
 print_screen_info(void)
@@ -69,52 +68,6 @@ gui_init_color(void)
 }
 #undef X
 
-/*static void
-shell()
-{
-	int c,n;
-	char *bp = BUFFER;
-
-	c = n = 0;
-
-	move(LINES-1,1); clrtoeol();
-	attron(COLOR_PAIR(GREEN_BLACK));mvaddstr(LINES-1,0,":");attroff(COLOR_PAIR(GREEN_BLACK));
-
-	while((c = getch()) != '\n' && c != _CHAR_ESC && n < BUFFSIZE-1 )
-	{
-		if(c == '\t')
-		{
-		}
-		else if(c == KEY_BACKSPACE && n > 0)
-		{
-			*--bp = '\0';
-			n--;
-		}
-		else if(c != KEY_BACKSPACE)
-		{	
-			*bp++ = c;
-			*bp = '\0';
-			n++;
-		}
-		move(LINES-1,1); clrtoeol();
-		addstr(BUFFER);	addch(' ' | COLOR_PAIR(WHITE_WHITE)); refresh();
-	}
-
-	if(c == _CHAR_ESC)
-		return;
-
-	if(strcmp(BUFFER,"q") == 0)
-		ec = _CHAR_ESC;
-	else if(strcmp(BUFFER,"debug") == 0)
-		is_debug = (is_debug) ? false : true;
-	else
-	{
-		move(LINES-1,1); clrtoeol();
-		attron(COLOR_PAIR(RED_WHITE)); addstr("In valid command"); attroff(COLOR_PAIR(RED_WHITE)); refresh(); napms(500);
-
-	}
-}*/
-
 static void 
 main_event(int c)
 {
@@ -128,9 +81,13 @@ main_event(int c)
 	if (c == _CHAR_COLON) {
 		mvaddch(LINES-1,0,':' | COLOR_PAIR(DWHITE_DBLUE));
 		refresh();
+
 		draw_textbar(textbar);
+
 		mvaddch(LINES-1,0,' ' | COLOR_PAIR(BLACK_BLACK));	
 		refresh();
+
+		parse_command();
 	}
 
 }
@@ -148,7 +105,6 @@ init_gui()
 
 	gui_init_color();
 
-	//getmaxyx(stdscr,screen_height,screen_width);
 	screen_height = LINES;
 	screen_width = COLS;
 

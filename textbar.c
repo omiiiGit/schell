@@ -123,9 +123,9 @@ draw_textbar(Textbar *self)
 
 			REDRAW_WIDGETS();
 
+			self->w = COLS - 1;
 			wresize(self->win,1,self->w);
 
-			self->w = COLS - 1;
 			self->y = LINES - 1;
 
 			goto render;

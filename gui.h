@@ -9,6 +9,7 @@
 #include "controls.h"
 #include "buffer.h"
 #include "widgets.h"
+#include "interpreter.h"
 
 void init_gui(void);
 void run(void);

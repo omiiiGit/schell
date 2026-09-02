@@ -10,7 +10,7 @@
 #include "buffer.h"
 #include "color.h"
 
-typedef struct {
+typedef struct Textbar {
 	unsigned int x,y,w,h;
 	int curs_pos;
 	int start_pos;

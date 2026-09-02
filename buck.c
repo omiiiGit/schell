@@ -19,12 +19,6 @@ static struct buck_t
 	return buck;
 }
 
-static void 
-shell()
-{
-
-}
-
 static void
 toggle_is_extended(struct buck_t *buck)
 {
@@ -34,6 +28,9 @@ toggle_is_extended(struct buck_t *buck)
 static void
 show_scroll_bar(struct buck_list_t *self, int w_width)
 {
+	if (self->size == 0)
+		return;
+
 	int w_height,i,scroll_len,scroll_pos;
 
 	scroll_len = self->lines - 1;
@@ -109,6 +106,7 @@ push_buck_to_list(struct buck_list_t *list,char *name)
 int
 free_buck_list(struct buck_list_t *list)
 {
+
 	struct buck_t *t = list->tail;
 	int i = 0;
 
@@ -126,6 +124,9 @@ free_buck_list(struct buck_list_t *list)
 void
 go_next_buck(struct buck_list_t *list)
 {
+	if (list->size == 0)
+		return;
+
 	list->selected->is_selected = false;
 	list->selected->is_extended = false;
 
@@ -170,6 +171,9 @@ skip_pos_next:
 void 
 go_prev_buck(struct buck_list_t *list)
 {
+	if (list->size == 0)
+		return;
+
 	list->selected->is_selected = false;
 	list->selected->is_extended = false;
 
@@ -227,19 +231,31 @@ skip_pos_prev:
 size_t
 show_buck_list(struct buck_list_t *list)
 {
-
 	if(list->hide)
 		return 0;
 
-	werase(list->win); wmove(list->win,0,0);
-	
 	int y,x,foo,offset_len,w_width,w_height;
 	struct buck_t *t = NULL;
-
 	y = x = offset_len = 0;
 	foo = 1;
 	t = list->start_buck;
 	getmaxyx(list->win,w_height,w_width);
+	chtype border_attr = (list->focus) ? COLOR_PAIR(GREEN_BLACK) : COLOR_PAIR(YELLOW_BLACK);
+
+	werase(list->win); wmove(list->win,0,0);
+
+	if (list->size == 0) {
+
+		wattron(list->win,border_attr | A_BOLD); box(list->win,0,0); wattroff(list->win,border_attr | A_BOLD);
+
+		wattron(list->win,A_BOLD); mvwprintw(list->win,0,((w_width - strlen(list->name) - 1/2)/2),"%s",list->name); wattroff(list->win,A_BOLD);
+
+		show_scroll_bar(list,w_width - 2);
+	
+		wrefresh(list->win);
+
+		return 0;
+	}
 
 	(void)w_height;
 
@@ -276,16 +292,9 @@ show_buck_list(struct buck_list_t *list)
 		foo++;
 	}
 
-	chtype border_attr = (list->focus) ? COLOR_PAIR(GREEN_BLACK) : COLOR_PAIR(YELLOW_BLACK);
-
 	wattron(list->win,border_attr | A_BOLD); box(list->win,0,0); wattroff(list->win,border_attr | A_BOLD);
 
-	char *sn = NULL;
-	asprintf(&sn,"%s",list->name);
-
-	wattron(list->win,A_BOLD); mvwprintw(list->win,0,((w_width - strlen(sn) - 1/2)/2),"%s",sn); wattroff(list->win,A_BOLD);
-
-	free(sn);
+	wattron(list->win,A_BOLD); mvwprintw(list->win,0,((w_width - strlen(list->name) - 1/2)/2),"%s",list->name); wattroff(list->win,A_BOLD);
 
 	show_scroll_bar(list,w_width - 2);
 	
@@ -307,9 +316,7 @@ event_buck_list(struct buck_list_t *self,int c)
 		case KEY_UP: case _KEY_K: go_prev_buck(self); break;
 		case _KEY_ENTER:
 					toggle_is_extended(self->selected); 
-		break;
-		case _CHAR_COLON: shell(); break;
-		//case _KEY_H: self->hide = true; clear();break;
+					break;
 		default: break;
 	}
 
