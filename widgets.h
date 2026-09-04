@@ -12,7 +12,7 @@ do { \
 extern struct buck_list_t *bucks;
 extern struct Textbar *textbar;
 extern bool is_debug;
-
+extern int ec;
 
 
 #endif

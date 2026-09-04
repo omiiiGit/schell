@@ -103,6 +103,45 @@ push_buck_to_list(struct buck_list_t *list,char *name)
 	list->size++;
 }
 
+bool del_buck_by_name(struct buck_list_t *list,char *name)
+{
+	struct buck_t *b = list->tail;
+	bool found = false;
+
+	while (b != NULL) {
+		if (strcmp(b->name,name) == 0) {
+			found = true;
+			break;
+		}
+
+		b = b->next;
+	}
+
+	if (!found)
+		return found;
+
+	struct buck_t *p = b->prev;
+	struct buck_t *n = b->next;
+
+	if (b->prev != NULL) {
+		p->next = n;
+		n->prev = p;
+	} 
+	else {
+		list->tail = list->tail->next;
+	}
+
+	if (b == list->selected) {
+		list->selected = p;
+		p->is_selected = true;
+	}
+
+	free(b);
+	list->size--;
+
+	return found;
+}
+
 int
 free_buck_list(struct buck_list_t *list)
 {

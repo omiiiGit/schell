@@ -4,12 +4,12 @@
 //struct buck_list_t bucks;
 struct buck_list_t *bucks = NULL;
 Textbar *textbar = NULL;
+int ec = 0;
 
 bool is_debug = true;
 
 static int screen_width;
 static int screen_height;
-static int ec;
 
 void
 print_screen_info(void)
@@ -50,6 +50,7 @@ gui_init_color(void)
 
 	init_color(DWHITE,1000,1000,1000);
 	init_color(DBLUE,0,0,1000);
+	init_color(DGREEN,0,1000,0);
 
 	//initializing colors from CREATE_COLORS_FOR macro
 	
@@ -64,7 +65,6 @@ gui_init_color(void)
 
 	init_pair(DWHITE_DBLUE,DWHITE,DBLUE);
 	init_pair(DBLUE_DWHITE,DBLUE,DWHITE);
-
 }
 #undef X
 

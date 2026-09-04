@@ -5,8 +5,8 @@ struct {
 	char *buffer;
 	char *message;
 } static InteCommands[] = {
-	[INTE_ADD] =  {"ADD",NULL,"Create buck successfully"},
-	[INTE_DELETE] = {"DELETE",NULL,"Delete buck successfully"},
+	[INTE_ADD] =  {"ADDBUCK",NULL,"Create buck successfully"},
+	[INTE_DELETE] = {"DELBUCK",NULL,"Delete buck successfully"},
 	[INTE_QUIT] = {"quit",NULL,"Exiting..."},
 	[INTE_INVALID] = {NULL,NULL,"Invalid Command"}
 };
@@ -40,20 +40,32 @@ parse_command(void)
 	
 	switch (cmd_type) {
 	case INTE_ADD:
-			//mvprintw(LINES - 1,0,"%s -> %s",cmd,buffer);
 			push_buck_to_list(bucks,buffer);
-			mvprintw(LINES - 1,0,"%s",InteCommands[cmd_type].message);
+			show_buck_list(bucks);
 			break;
 	case INTE_DELETE:
+			del_buck_by_name(bucks,buffer);
+			show_buck_list(bucks);
 			break;
 	case INTE_QUIT:
-
+			ec = _CHAR_ESC;	
 			break;
 	case INTE_INVALID: 
-			mvaddstr(LINES-1,0,"Invalid command");
 			break;
 	default:
 	}
+
+	attron(COLOR_PAIR(YELLOW_RED)); 
+
+	mvprintw(LINES - 1,0,"%s",InteCommands[cmd_type].message); 
+
+	if (cmd_type == INTE_INVALID) {
+		addch(' ');
+		addstr(cmd);
+	}
+
+
+	attroff(COLOR_PAIR(YELLOW_RED));
 
 	refresh();
 	napms(400);

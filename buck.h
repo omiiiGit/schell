@@ -45,6 +45,7 @@ int free_buck_list(struct buck_list_t *list);
 void event_buck_list(struct buck_list_t *self,int c);
 void go_next_buck(struct buck_list_t *list);
 void go_prev_buck(struct buck_list_t *list);
+bool del_buck_by_name(struct buck_list_t *list,char *name);
 size_t show_buck_list(struct buck_list_t *list);
 
 

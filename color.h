@@ -16,6 +16,7 @@
 typedef enum {
 	DWHITE = 100,
 	DBLUE,
+	DGREEN,
 }GUI_COLOR;	
 
 #define X(first,second) \
@@ -31,6 +32,7 @@ typedef enum {
 	CREATE_COLORS_FOR(WHITE)
 	DBLUE_DWHITE,
 	DWHITE_DBLUE,
+	YELLOW_DGREEN,
 }GUI_COLOR_PAIR;
 #undef X
 
