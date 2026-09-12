@@ -1,7 +1,6 @@
 #include "gui.h"
 #include "widgets.h"
 
-//struct buck_list_t bucks;
 struct buck_list_t *bucks = NULL;
 Textbar *textbar = NULL;
 int ec = 0;
