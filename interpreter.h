@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include "textbar.h"
 #include "widgets.h"
+#include "buffer.h"
 #include "color.h"
 
 typedef enum {

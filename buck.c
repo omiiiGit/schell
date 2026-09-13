@@ -50,6 +50,8 @@ show_scroll_bar(struct buck_list_t *self, int w_width)
 }
 
 
+
+
 void
 create_buck_list(struct buck_list_t *self,int lines,int w, int y, int x,const char *name)
 {

@@ -2,7 +2,7 @@
 
 const char *DIRPATH = "./dir";
 
-struct {
+/*struct {
 	char *command;
 	char *buffer;
 	char *message;
@@ -11,7 +11,24 @@ struct {
 	[INTE_DELETE] = {"DELBUCK",NULL,"Delete buck successfully"},
 	[INTE_QUIT] = {"quit",NULL,"Exiting..."},
 	[INTE_INVALID] = {NULL,NULL,"Invalid Command"}
+};*/
+
+struct {
+	char *command;
+	char *buffer;
+	char message[BUFFSIZE];
+} static InteCommands[] = {
+	[INTE_ADD] =  {"ADDBUCK",NULL},
+	[INTE_DELETE] = {"DELBUCK",NULL},
+	[INTE_QUIT] = {"quit",NULL},
+	[INTE_INVALID] = {NULL,NULL}
 };
+
+static void
+make_intecmd_msg(INTECMD type,char *msg) 
+{
+	strcpy(InteCommands[type].message,msg);
+}
 
 static INTECMD 
 get_cmd_type(char *cmd) 
@@ -29,10 +46,34 @@ get_cmd_type(char *cmd)
 	return INTE_INVALID;
 }
 
+static bool
+is_buck_exist(char *name) 
+{
+	bool found = false;
+	struct buck_t *b = bucks->tail;
+
+	while (b != NULL) {
+		if (strcmp(b->name,name) == 0) {
+			found = true;
+			break;
+		}
+		b = b->next;
+	}
+
+	return found;
+}
+
 static void
 add_entry(char *name) 
 {
 	char *path;
+
+	if (is_buck_exist(name)) {
+		make_intecmd_msg(INTE_ADD,"Buck exist already");
+		return;
+	} else 
+		make_intecmd_msg(INTE_ADD,"Buck added successfully");
+
 	
 	push_buck_to_list(bucks,name);
 	asprintf(&path,"%s/%s",DIRPATH,name);
@@ -45,6 +86,13 @@ static void
 del_entry(char *name) 
 {
 	char *path;
+
+	if (!is_buck_exist(name)) {
+		make_intecmd_msg(INTE_DELETE,"Buck don't exist");
+		return;
+	} else 
+		make_intecmd_msg(INTE_DELETE,"Buck deleted successfully");
+
 
 	del_buck_by_name(bucks,name);
 	asprintf(&path,"%s/%s",DIRPATH,name);
@@ -89,7 +137,6 @@ parse_command(void)
 		addstr(cmd);
 	}
 
-
 	attroff(COLOR_PAIR(YELLOW_RED));
 
 	refresh();
@@ -98,3 +145,16 @@ parse_command(void)
 	clrtoeol();
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
