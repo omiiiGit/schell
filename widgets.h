@@ -9,6 +9,8 @@ do { \
 		print_screen_info();\
 } while(0) 
 
+extern const char *DIRPATH;
+
 extern struct buck_list_t *bucks;
 extern struct Textbar *textbar;
 extern bool is_debug;

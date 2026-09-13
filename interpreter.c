@@ -1,5 +1,7 @@
 #include "interpreter.h"
 
+const char *DIRPATH = "./dir";
+
 struct {
 	char *command;
 	char *buffer;
@@ -27,6 +29,29 @@ get_cmd_type(char *cmd)
 	return INTE_INVALID;
 }
 
+static void
+add_entry(char *name) 
+{
+	char *path;
+	
+	push_buck_to_list(bucks,name);
+	asprintf(&path,"%s/%s",DIRPATH,name);
+	mkdir(path,0755);
+	show_buck_list(bucks);
+	free(path);
+}
+
+static void 
+del_entry(char *name) 
+{
+	char *path;
+
+	del_buck_by_name(bucks,name);
+	asprintf(&path,"%s/%s",DIRPATH,name);
+	rmdir(path);
+	free(path);
+}
+
 void
 parse_command(void)
 {
@@ -40,11 +65,11 @@ parse_command(void)
 	
 	switch (cmd_type) {
 	case INTE_ADD:
-			push_buck_to_list(bucks,buffer);
-			show_buck_list(bucks);
+			add_entry(buffer);
+			show_buck_list(bucks);		
 			break;
 	case INTE_DELETE:
-			del_buck_by_name(bucks,buffer);
+			del_entry(buffer);
 			show_buck_list(bucks);
 			break;
 	case INTE_QUIT:

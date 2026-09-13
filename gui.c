@@ -40,6 +40,26 @@ is_screen_resize(void)
 	return (screen_height != LINES || screen_width != COLS) ? true : false;
 }
 
+
+static void
+load_buck_dirs() 
+{
+	DIR *dir;
+	struct dirent *de;
+
+	if ((dir = opendir(DIRPATH)) == NULL) {
+		fprintf(stderr,"Failed to load bucks for dir\n");
+	}
+
+	while ((de = readdir(dir)) != NULL) {
+
+		if (strcmp(de->d_name,".") == 0 || strcmp(de->d_name,"..") == 0)
+			continue;
+
+		push_buck_to_list(bucks,de->d_name);
+	}
+}
+
 #define X(first,second) \
 	init_pair(first##_##second,COLOR_##first,COLOR_##second);
 static void
@@ -113,6 +133,7 @@ init_gui()
 
 	textbar = create_textbar(stdscr,COLS-1,1,LINES-1,COLOR_PAIR(DWHITE_DBLUE),COLOR_PAIR(DBLUE_DWHITE));
 
+	load_buck_dirs();
 }
 
 void 

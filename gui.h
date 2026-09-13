@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <locale.h>
+#include <dirent.h>
 #include "textbar.h"
 #include "color.h"
 #include "buck.h"

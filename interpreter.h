@@ -4,6 +4,8 @@
 #include <stddef.h>
 #include <string.h>
 #include <ncurses.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include "textbar.h"
 #include "widgets.h"
 #include "color.h"
