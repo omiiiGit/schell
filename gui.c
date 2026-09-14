@@ -34,13 +34,6 @@ print_screen_info(void)
 	move(0,0);
 }
 
-static bool
-is_screen_resize(void)
-{
-	return (screen_height != LINES || screen_width != COLS) ? true : false;
-}
-
-
 static void
 load_buck_dirs() 
 {
@@ -101,12 +94,12 @@ main_event(int c)
 		mvaddch(LINES-1,0,':' | COLOR_PAIR(DWHITE_DBLUE));
 		refresh();
 
-		draw_textbar(textbar);
+		int i = draw_textbar(textbar);
 
 		mvaddch(LINES-1,0,' ' | COLOR_PAIR(BLACK_BLACK));	
 		refresh();
 
-		parse_command();
+		if (i > 0) parse_command();
 	}
 
 }
@@ -123,9 +116,6 @@ init_gui()
 	curs_set(0);
 
 	gui_init_color();
-
-	screen_height = LINES;
-	screen_width = COLS;
 
 	bucks = (struct buck_list_t*)malloc(sizeof(struct buck_list_t));
 	create_buck_list(bucks,10,15,1,1,"BUCKS");

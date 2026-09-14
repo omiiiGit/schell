@@ -84,20 +84,23 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
 endif
 set shortmess+=aoO
 badd +1 main.c
-badd +13 gui.h
-badd +97 gui.c
-badd +1 buck.h
-badd +1 buck.c
+badd +6 gui.h
+badd +46 gui.c
+badd +48 buck.h
+badd +4 buck.c
 badd +22 textbar.h
 badd +103 textbar.c
 badd +1 makefile
-badd +1 interpreter.h
-badd +42 interpreter.c
-badd +0 widgets.h
+badd +9 interpreter.h
+badd +6 interpreter.c
+badd +1 widgets.h
+badd +1 buffer.h
+badd +0 buffer.c
 argglobal
 :%argdel
 :$argadd main.c
 set stal=2
+tabnew +setlocal\ bufhidden=wipe
 tabnew +setlocal\ bufhidden=wipe
 tabnew +setlocal\ bufhidden=wipe
 tabnew +setlocal\ bufhidden=wipe
@@ -295,17 +298,17 @@ setlocal wrapmargin=0
 silent! normal! zE
 &fdl = &fdl
 {
-  var l: number = 3 - ((2 * winheight(0) + 24) / 49)
+  var l: number = 8 - ((7 * winheight(0) + 24) / 49)
   if l < 1 | l = 1 | endif
   keepjumps exe ":" .. l
   normal! zt
-  keepjumps :3
-  normal! 011|
+  keepjumps :8
+  normal! 0
 }
 tabnext
-edit gui.h
+edit gui.c
 argglobal
-balt gui.c
+balt gui.h
 cpo_save = &cpo
 set cpo&vim
 inoremap <buffer> <silent> <M-n> :call AutoPairsJump()a
@@ -494,11 +497,11 @@ setlocal wrapmargin=0
 silent! normal! zE
 &fdl = &fdl
 {
-  var l: number = 14 - ((13 * winheight(0) + 24) / 49)
+  var l: number = 55 - ((11 * winheight(0) + 24) / 49)
   if l < 1 | l = 1 | endif
   keepjumps exe ":" .. l
   normal! zt
-  keepjumps :14
+  keepjumps :55
   normal! 0
 }
 tabnext
@@ -693,11 +696,11 @@ setlocal wrapmargin=0
 silent! normal! zE
 &fdl = &fdl
 {
-  var l: number = 18 - ((0 * winheight(0) + 24) / 49)
+  var l: number = 53 - ((4 * winheight(0) + 24) / 49)
   if l < 1 | l = 1 | endif
   keepjumps exe ":" .. l
   normal! zt
-  keepjumps :18
+  keepjumps :53
   normal! 0
 }
 tabnext
@@ -892,17 +895,17 @@ setlocal wrapmargin=0
 silent! normal! zE
 &fdl = &fdl
 {
-  var l: number = 25 - ((23 * winheight(0) + 24) / 49)
+  var l: number = 3 - ((2 * winheight(0) + 24) / 49)
   if l < 1 | l = 1 | endif
   keepjumps exe ":" .. l
   normal! zt
-  keepjumps :25
+  keepjumps :3
   normal! 0
 }
 tabnext
-edit interpreter.h
+edit interpreter.c
 argglobal
-balt interpreter.c
+balt interpreter.h
 cpo_save = &cpo
 set cpo&vim
 inoremap <buffer> <silent> <M-n> :call AutoPairsJump()a
@@ -1091,17 +1094,216 @@ setlocal wrapmargin=0
 silent! normal! zE
 &fdl = &fdl
 {
-  var l: number = 7 - ((6 * winheight(0) + 24) / 49)
+  var l: number = 80 - ((0 * winheight(0) + 24) / 49)
   if l < 1 | l = 1 | endif
   keepjumps exe ":" .. l
   normal! zt
-  keepjumps :7
-  normal! 020|
+  keepjumps :80
+  normal! 016|
 }
 tabnext
 edit widgets.h
 argglobal
 balt interpreter.h
+cpo_save = &cpo
+set cpo&vim
+inoremap <buffer> <silent> <M-n> :call AutoPairsJump()a
+legacy inoremap <buffer> <silent> <expr> <M-p> AutoPairsToggle()
+inoremap <buffer> <silent> <M-b> =AutoPairsBackInsert()
+inoremap <buffer> <silent> <M-e> =AutoPairsFastWrap()
+inoremap <buffer> <silent> <C-H> =AutoPairsDelete()
+inoremap <buffer> <silent> <BS> =AutoPairsDelete()
+inoremap <buffer> <silent> <M-'> =AutoPairsMoveCharacter('''')
+inoremap <buffer> <silent> <M-"> =AutoPairsMoveCharacter('"')
+inoremap <buffer> <silent> <M-}> =AutoPairsMoveCharacter('}')
+inoremap <buffer> <silent> <M-{> =AutoPairsMoveCharacter('{')
+inoremap <buffer> <silent> <M-]> =AutoPairsMoveCharacter(']')
+inoremap <buffer> <silent> <M-[> =AutoPairsMoveCharacter('[')
+inoremap <buffer> <silent> <M-)> =AutoPairsMoveCharacter(')')
+inoremap <buffer> <silent> <M-(> =AutoPairsMoveCharacter('(')
+inoremap <buffer> <silent> § =AutoPairsMoveCharacter('''')
+inoremap <buffer> <silent> ¢ =AutoPairsMoveCharacter('"')
+inoremap <buffer> <silent> © =AutoPairsMoveCharacter(')')
+inoremap <buffer> <silent> ¨ =AutoPairsMoveCharacter('(')
+inoremap <buffer> <silent> î :call AutoPairsJump()a
+legacy inoremap <buffer> <silent> <expr> ð AutoPairsToggle()
+inoremap <buffer> <silent> â =AutoPairsBackInsert()
+inoremap <buffer> <silent> å =AutoPairsFastWrap()
+inoremap <buffer> <silent> ý =AutoPairsMoveCharacter('}')
+inoremap <buffer> <silent> û =AutoPairsMoveCharacter('{')
+inoremap <buffer> <silent> Ý =AutoPairsMoveCharacter(']')
+inoremap <buffer> <silent> Û =AutoPairsMoveCharacter('[')
+noremap <buffer> <silent> <M-n> :call AutoPairsJump()
+noremap <buffer> <silent> <M-p> :call AutoPairsToggle()
+inoremap <buffer> <silent>  =AutoPairsDelete()
+inoremap <buffer> <silent>   =AutoPairsSpace()
+inoremap <buffer> <silent> " =AutoPairsInsert('"')
+inoremap <buffer> <silent> ' =AutoPairsInsert('''')
+inoremap <buffer> <silent> ( =AutoPairsInsert('(')
+inoremap <buffer> <silent> ) =AutoPairsInsert(')')
+noremap <buffer> <silent> î :call AutoPairsJump()
+noremap <buffer> <silent> ð :call AutoPairsToggle()
+inoremap <buffer> <silent> [ =AutoPairsInsert('[')
+inoremap <buffer> <silent> ] =AutoPairsInsert(']')
+inoremap <buffer> <silent> ` =AutoPairsInsert('`')
+inoremap <buffer> <silent> { =AutoPairsInsert('{')
+inoremap <buffer> <silent> } =AutoPairsInsert('}')
+&cpo = cpo_save
+setlocal keymap=
+setlocal noarabic
+setlocal noautoindent
+setlocal backupcopy=
+setlocal balloonexpr=
+setlocal nobinary
+setlocal nobreakindent
+setlocal breakindentopt=
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal cindent
+setlocal cinkeys=0{,0},0),0],:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinscopedecls=public,protected,private
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,:///,://
+setlocal commentstring=/*\ %s\ */
+setlocal complete=.,w,b,u,t,i
+setlocal completefunc=
+setlocal completeopt=
+setlocal concealcursor=
+setlocal conceallevel=0
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+setlocal nocursorline
+setlocal cursorlineopt=both
+setlocal define=^\\s*#\\s*define
+setlocal dictionary=
+setlocal nodiff
+setlocal diffanchors=
+setlocal equalprg=
+setlocal errorformat=
+setlocal eventignorewin=
+setlocal noexpandtab
+if &filetype != 'c'
+setlocal filetype=c
+endif
+setlocal fillchars=
+setlocal findfunc=
+setlocal fixendofline
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+setlocal foldmethod=manual
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal formatoptions=croql
+setlocal formatprg=
+setlocal grepformat=
+setlocal grepprg=
+setlocal iminsert=0
+setlocal imsearch=-1
+setlocal include=^\\s*#\\s*include
+setlocal includeexpr=
+setlocal indentexpr=
+setlocal indentkeys=0{,0},0),0],:,0#,!^F,o,O,e
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,192-255
+setlocal keywordprg=
+setlocal lhistory=10
+setlocal nolinebreak
+setlocal nolisp
+setlocal lispoptions=
+setlocal lispwords=
+setlocal nolist
+setlocal listchars=
+setlocal makeencoding=
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=bin,octal,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=ccomplete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+set relativenumber
+setlocal relativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal scrolloff=-1
+setlocal scrolloffpad=-1
+setlocal shiftwidth=8
+setlocal noshortname
+setlocal showbreak=
+setlocal sidescrolloff=-1
+setlocal signcolumn=auto
+setlocal nosmartindent
+setlocal nosmoothscroll
+setlocal softtabstop=0
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal spelloptions=
+setlocal statusline=%!airline#statusline(1)
+setlocal statuslineopt=
+setlocal suffixesadd=
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != 'c'
+setlocal syntax=c
+endif
+setlocal tabstop=8
+setlocal tagcase=
+setlocal tagfunc=
+setlocal tags=
+setlocal termwinkey=
+setlocal termwinscroll=10000
+setlocal termwinsize=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal thesaurusfunc=
+setlocal noundofile
+setlocal undolevels=-123456
+setlocal varsofttabstop=
+setlocal vartabstop=
+setlocal virtualedit=
+setlocal wincolor=
+setlocal nowinfixbuf
+setlocal nowinfixheight
+setlocal nowinfixwidth
+setlocal winhighlight=
+setlocal wrap
+setlocal wrapmargin=0
+silent! normal! zE
+&fdl = &fdl
+{
+  var l: number = 11 - ((10 * winheight(0) + 24) / 49)
+  if l < 1 | l = 1 | endif
+  keepjumps exe ":" .. l
+  normal! zt
+  keepjumps :11
+  normal! 0
+}
+tabnext
+edit buffer.c
+argglobal
+balt buffer.h
 cpo_save = &cpo
 set cpo&vim
 inoremap <buffer> <silent> <M-n> :call AutoPairsJump()a
@@ -1489,14 +1691,14 @@ setlocal wrapmargin=0
 silent! normal! zE
 &fdl = &fdl
 {
-  var l: number = 1 - ((0 * winheight(0) + 24) / 49)
+  var l: number = 33 - ((32 * winheight(0) + 24) / 49)
   if l < 1 | l = 1 | endif
   keepjumps exe ":" .. l
   normal! zt
-  keepjumps :1
-  normal! 0
+  keepjumps :33
+  normal! 05|
 }
-tabnext 6
+tabnext 2
 set stal=1
 if wipebuf != -1 && len(win_findbuf(wipebuf)) == 0
   silent exe 'bwipe ' .. wipebuf

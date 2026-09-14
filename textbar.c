@@ -67,13 +67,15 @@ Textbar
 	return self;
 }
 
-void
+int
 draw_textbar(Textbar *self)
 {
 	int c;
 
-	for (int i = 0;i < BUFFSIZE;i++)
-		self->buffer[i] = '\0';
+	//for (int i = 0;i < BUFFSIZE;i++)
+	//	self->buffer[i] = '\0';
+
+	memset(self->buffer,'\0',BUFFSIZE);
 
 	self->curs_pos = 0;
 	self->start_pos = 0;
@@ -163,6 +165,8 @@ render:
 	werase(self->win);
 
 	wrefresh(self->win);
+
+	return self->curs_pos;
 }
 
 void 

@@ -30,7 +30,7 @@ utils.o: utils.c utils.h
 textbar.o: textbar.c textbar.h widgets.h interpreter.c
 	$(CC) -c $(CFLAGS) textbar.c
 
-intepreter.o: interpreter.c interpreter.h widgets.h
+interpreter.o: interpreter.c interpreter.h widgets.h
 	$(CC) -c $(CFLAGS) interpreter.c
 
 .PHONY: clean

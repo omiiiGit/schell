@@ -50,8 +50,6 @@ show_scroll_bar(struct buck_list_t *self, int w_width)
 }
 
 
-
-
 void
 create_buck_list(struct buck_list_t *self,int lines,int w, int y, int x,const char *name)
 {
@@ -105,7 +103,51 @@ push_buck_to_list(struct buck_list_t *list,char *name)
 	list->size++;
 }
 
-bool del_buck_by_name(struct buck_list_t *list,char *name)
+bool
+del_buck_by_name_two(struct buck_list_t *list,char *name) 
+{
+	bool found = false;
+	struct buck_t **node = &(list->tail);
+
+	while ((*node) != NULL) {
+
+		if (strcmp((*node)->name,name) == 0) {
+			found = true;
+			break;
+		}
+
+		node = (&(*node)->next);
+	}
+
+	if (!found)
+		return found;
+
+	struct buck_t *freed = (*node);
+	struct buck_t *prev = (*node)->prev;
+	struct buck_t *next = (*node)->next;
+
+
+	if ((*node) == list->tail) {
+		list->tail = list->tail->next;
+		goto skip_del;
+	} else if ((*node) == list->head) {
+		list->head = list->head->prev;
+		goto skip_del;
+	}
+
+	(*node) = (*node)->next;
+	next->prev = prev;
+
+skip_del:
+	free(freed);
+	list->size--;
+
+	return found;
+}
+
+
+bool 
+del_buck_by_name(struct buck_list_t *list,char *name)
 {
 	struct buck_t *b = list->tail;
 	bool found = false;
@@ -125,21 +167,26 @@ bool del_buck_by_name(struct buck_list_t *list,char *name)
 	struct buck_t *p = b->prev;
 	struct buck_t *n = b->next;
 
-	if (b->prev != NULL) {
+	if (b == list->tail) {
+		if (b == list->start_buck) {
+			list->start_buck = list->start_buck->next;
+		}
+
+		list->tail = list->tail->next;
+		list->tail->prev = NULL;
+	} else if (b == list->head) {
+		list->head = list->head->prev;
+		list->head->next = NULL;
+	} else {
 		p->next = n;
 		n->prev = p;
-	} 
-	else {
-		list->tail = list->tail->next;
-	}
 
-	if (b == list->selected) {
-		list->selected = p;
-		p->is_selected = true;
 	}
 
 	free(b);
 	list->size--;
+	list->e_pos = (list->e_pos == 0) ? 0 : list->e_pos - 1;
+	list->pos = (list->pos == 0) ? 0 : list->pos - 1;
 
 	return found;
 }

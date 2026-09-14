@@ -2,17 +2,6 @@
 
 const char *DIRPATH = "./dir";
 
-/*struct {
-	char *command;
-	char *buffer;
-	char *message;
-} static InteCommands[] = {
-	[INTE_ADD] =  {"ADDBUCK",NULL,"Create buck successfully"},
-	[INTE_DELETE] = {"DELBUCK",NULL,"Delete buck successfully"},
-	[INTE_QUIT] = {"quit",NULL,"Exiting..."},
-	[INTE_INVALID] = {NULL,NULL,"Invalid Command"}
-};*/
-
 struct {
 	char *command;
 	char *buffer;
@@ -71,15 +60,16 @@ add_entry(char *name)
 	if (is_buck_exist(name)) {
 		make_intecmd_msg(INTE_ADD,"Buck exist already");
 		return;
-	} else 
-		make_intecmd_msg(INTE_ADD,"Buck added successfully");
+	} 
 
-	
 	push_buck_to_list(bucks,name);
 	asprintf(&path,"%s/%s",DIRPATH,name);
 	mkdir(path,0755);
-	show_buck_list(bucks);
 	free(path);
+
+	make_intecmd_msg(INTE_ADD,"Buck added successfully");
+
+	show_buck_list(bucks);
 }
 
 static void 
@@ -87,17 +77,18 @@ del_entry(char *name)
 {
 	char *path;
 
-	if (!is_buck_exist(name)) {
+	if (! del_buck_by_name(bucks,name)) {
 		make_intecmd_msg(INTE_DELETE,"Buck don't exist");
 		return;
-	} else 
-		make_intecmd_msg(INTE_DELETE,"Buck deleted successfully");
+	}
 
-
-	del_buck_by_name(bucks,name);
 	asprintf(&path,"%s/%s",DIRPATH,name);
 	rmdir(path);
 	free(path);
+
+	make_intecmd_msg(INTE_DELETE,"Buck deleted successfully");
+
+	show_buck_list(bucks);
 }
 
 void
@@ -122,8 +113,10 @@ parse_command(void)
 			break;
 	case INTE_QUIT:
 			ec = _CHAR_ESC;	
+			make_intecmd_msg(INTE_QUIT,"Exiting..");
 			break;
 	case INTE_INVALID: 
+			make_intecmd_msg(INTE_INVALID,"Invalid command");
 			break;
 	default:
 	}
@@ -132,15 +125,10 @@ parse_command(void)
 
 	mvprintw(LINES - 1,0,"%s",InteCommands[cmd_type].message); 
 
-	if (cmd_type == INTE_INVALID) {
-		addch(' ');
-		addstr(cmd);
-	}
-
 	attroff(COLOR_PAIR(YELLOW_RED));
 
 	refresh();
-	napms(400);
+	napms(600);
 	move(LINES-1,0);
 	clrtoeol();
 

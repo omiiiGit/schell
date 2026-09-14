@@ -24,7 +24,7 @@ typedef struct Textbar {
 } Textbar;
 
 Textbar *create_textbar(WINDOW *parent,int w,int x,int y,chtype bar_color,chtype curs_color);
-void draw_textbar(Textbar *self);
+int draw_textbar(Textbar *self);
 void free_textbar(Textbar *self);
 
 
