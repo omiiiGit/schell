@@ -39,6 +39,7 @@ clean:
 
 .PHONY: run
 run:
+	./test.sh
 	./$(PROG)
 
 .PHONY: debug

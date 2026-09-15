@@ -2,6 +2,7 @@
 #include "widgets.h"
 
 struct buck_list_t *bucks = NULL;
+struct buck_list_t *dates = NULL;
 Textbar *textbar = NULL;
 int ec = 0;
 
@@ -89,6 +90,7 @@ main_event(int c)
 	}
 
 	event_buck_list(bucks,c);
+	event_buck_list(dates,c);
 
 	if (c == _CHAR_COLON) {
 		mvaddch(LINES-1,0,':' | COLOR_PAIR(DWHITE_DBLUE));
@@ -121,6 +123,10 @@ init_gui()
 	create_buck_list(bucks,10,15,1,1,"BUCKS");
 	bucks->focus = true;
 
+	dates = (struct buck_list_t*)malloc(sizeof(struct buck_list_t));
+	create_buck_list(dates,15,15,1,20,"DATES");
+	dates->focus = false;
+
 	textbar = create_textbar(stdscr,COLS-1,1,LINES-1,COLOR_PAIR(DWHITE_DBLUE),COLOR_PAIR(DBLUE_DWHITE));
 
 	load_buck_dirs();
@@ -137,6 +143,7 @@ run(void)
 		refresh();
 
 		show_buck_list(bucks);
+		show_buck_list(dates);
 
 		if(is_debug)
 			print_screen_info();

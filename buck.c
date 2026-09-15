@@ -103,49 +103,6 @@ push_buck_to_list(struct buck_list_t *list,char *name)
 	list->size++;
 }
 
-bool
-del_buck_by_name_two(struct buck_list_t *list,char *name) 
-{
-	bool found = false;
-	struct buck_t **node = &(list->tail);
-
-	while ((*node) != NULL) {
-
-		if (strcmp((*node)->name,name) == 0) {
-			found = true;
-			break;
-		}
-
-		node = (&(*node)->next);
-	}
-
-	if (!found)
-		return found;
-
-	struct buck_t *freed = (*node);
-	struct buck_t *prev = (*node)->prev;
-	struct buck_t *next = (*node)->next;
-
-
-	if ((*node) == list->tail) {
-		list->tail = list->tail->next;
-		goto skip_del;
-	} else if ((*node) == list->head) {
-		list->head = list->head->prev;
-		goto skip_del;
-	}
-
-	(*node) = (*node)->next;
-	next->prev = prev;
-
-skip_del:
-	free(freed);
-	list->size--;
-
-	return found;
-}
-
-
 bool 
 del_buck_by_name(struct buck_list_t *list,char *name)
 {
@@ -177,6 +134,10 @@ del_buck_by_name(struct buck_list_t *list,char *name)
 	} else if (b == list->head) {
 		list->head = list->head->prev;
 		list->head->next = NULL;
+
+		list->size--;
+		
+		return found;
 	} else {
 		p->next = n;
 		n->prev = p;
