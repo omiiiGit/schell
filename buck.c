@@ -152,6 +152,32 @@ del_buck_by_name(struct buck_list_t *list,char *name)
 	return found;
 }
 
+bool
+empty_buck_list(struct buck_list_t *list)
+{
+
+	struct buck_t *t = list->tail;
+	struct buck_t *next = NULL;
+	int i = 0;
+
+	while (t != NULL) {
+
+		next = t->next;
+		free(t);
+		t = next;
+		i++;
+
+	}	
+
+	if (i != list->size)
+		return false;
+
+	list->size = 0;
+	list->tail = NULL;
+
+	return true;
+}
+
 int
 free_buck_list(struct buck_list_t *list)
 {
@@ -159,8 +185,7 @@ free_buck_list(struct buck_list_t *list)
 	struct buck_t *t = list->tail;
 	int i = 0;
 
-	while(t != NULL)
-	{
+	while (t != NULL) {
 		struct buck_t *next = t->next;
 		free(t);
 		t = next;
@@ -179,8 +204,7 @@ go_next_buck(struct buck_list_t *list)
 	list->selected->is_selected = false;
 	list->selected->is_extended = false;
 
-	if(list->selected->next == NULL)
-	{
+	if (list->selected->next == NULL) {
 		list->start_buck = list->tail;
 		list->pos = 0;
 		list->e_pos = 0;
@@ -195,8 +219,7 @@ go_next_buck(struct buck_list_t *list)
 
 	i = 0;
 
-	if(list->pos == list->lines - 2)
-	{
+	if (list->pos == list->lines - 2) {
 		list->pos = 0;
 
 		while(list->start_buck != NULL && i < list->lines - 1)
@@ -226,8 +249,7 @@ go_prev_buck(struct buck_list_t *list)
 	list->selected->is_selected = false;
 	list->selected->is_extended = false;
 
-	if(list->selected->prev == NULL)
-	{		
+	if (list->selected->prev == NULL) {		
 		list->selected = list->head;
 		list->selected->is_selected = true;
 
@@ -254,8 +276,7 @@ go_prev_buck(struct buck_list_t *list)
 
 	i = 0;
 
-	if(list->pos == 0)
-	{
+	if (list->pos == 0) {
 		list->pos = list->lines - 2;
 
 		while(list->start_buck != NULL && i < list->lines - 1)
@@ -308,13 +329,11 @@ show_buck_list(struct buck_list_t *list)
 
 	(void)w_height;
 
-	while(t != NULL && y != list->lines)
-	{
+	while (t != NULL && y != list->lines) {
 		getyx(list->win,y,x);
 		wmove(list->win,foo,1);
 
-		if(t->is_selected)
-		{
+		if (t->is_selected) {
 			chtype flag = COLOR_PAIR(BLACK_YELLOW) | A_BOLD;
 
 			wchar_t *triangle = (t->is_extended) ? DOTRI : UPTRI;
@@ -332,9 +351,7 @@ show_buck_list(struct buck_list_t *list)
 			waddch(list->win,'\n');
 			wattroff(list->win,flag); 
 			
-		}
-		else	
-		{
+		} else {
 			wprintw(list->win,"%d %s\n",t->index,t->name);
 		}
 		t = t->next;
@@ -359,8 +376,7 @@ event_buck_list(struct buck_list_t *self,int c)
 	if(!self->focus)
 		return;
 
-	switch(c)
-	{
+	switch (c) {
 		case KEY_DOWN: case _KEY_J: go_next_buck(self); break;
 		case KEY_UP: case _KEY_K: go_prev_buck(self); break;
 		case _KEY_ENTER:

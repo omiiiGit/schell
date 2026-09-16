@@ -48,7 +48,6 @@ Textbar
 		.x = x,.y = y,
 		.curs_pos = 0,
 		.start_pos = 0,
-		//.win = derwin(parent,1,w,y,x),
 		.win = newwin(1,w,y,x),
 		.bar_color = bar_color,
 		.curs_color = curs_color,
@@ -71,9 +70,6 @@ int
 draw_textbar(Textbar *self)
 {
 	int c;
-
-	//for (int i = 0;i < BUFFSIZE;i++)
-	//	self->buffer[i] = '\0';
 
 	memset(self->buffer,'\0',BUFFSIZE);
 

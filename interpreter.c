@@ -9,6 +9,8 @@ struct {
 } static InteCommands[] = {
 	[INTE_ADD] =  {"ADDBUCK",NULL},
 	[INTE_DELETE] = {"DELBUCK",NULL},
+	[INTE_ADDDATE] =  {"ADDDATE",NULL},
+	[INTE_DELDATE] = {"DELDATE",NULL},
 	[INTE_QUIT] = {"quit",NULL},
 	[INTE_INVALID] = {NULL,NULL}
 };

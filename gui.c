@@ -54,6 +54,41 @@ load_buck_dirs()
 	}
 }
 
+static void
+load_dates_files() 
+{
+	if (!bucks->focus)
+		return;
+
+	if (! empty_buck_list(dates)) 
+		return;
+
+	char *buck_name = bucks->selected->name;
+
+	DIR *dir;
+	struct dirent *dp;
+	char *path;
+
+	asprintf(&path,"%s/%s",DIRPATH,buck_name);
+
+	if ((dir = opendir(path)) == NULL) {
+		fprintf(stderr,"Failed to load buck %s\n",buck_name);
+		return;
+	}
+
+	while ((dp = readdir(dir)) != NULL) {
+	
+		if (strcmp(dp->d_name,".") == 0 || strcmp(dp->d_name,"..") == 0) 
+			continue;
+
+		push_buck_to_list(dates,dp->d_name);
+	}
+
+	free(path);
+	closedir(dir);
+
+}
+
 #define X(first,second) \
 	init_pair(first##_##second,COLOR_##first,COLOR_##second);
 static void
@@ -85,14 +120,11 @@ static void
 main_event(int c)
 {
 
-	if (c == KEY_RESIZE) {
+	switch (c) {
+	case KEY_RESIZE:
 		erase(); refresh(); move(0,0);
-	}
-
-	event_buck_list(bucks,c);
-	event_buck_list(dates,c);
-
-	if (c == _CHAR_COLON) {
+		break;
+	case _CHAR_COLON:
 		mvaddch(LINES-1,0,':' | COLOR_PAIR(DWHITE_DBLUE));
 		refresh();
 
@@ -100,10 +132,23 @@ main_event(int c)
 
 		mvaddch(LINES-1,0,' ' | COLOR_PAIR(BLACK_BLACK));	
 		refresh();
-
 		if (i > 0) parse_command();
+		break;
+	case KEY_RIGHT:
+		bucks->focus = false;
+		dates->focus = true;
+		break;
+	case KEY_LEFT:
+		bucks->focus = true;
+		dates->focus = false;
+		break;
 	}
 
+
+	event_buck_list(bucks,c);
+	event_buck_list(dates,c);
+
+	load_dates_files();
 }
 
 void
