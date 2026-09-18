@@ -169,7 +169,7 @@ init_gui()
 	bucks->focus = true;
 
 	dates = (struct buck_list_t*)malloc(sizeof(struct buck_list_t));
-	create_buck_list(dates,15,15,1,20,"DATES");
+	create_buck_list(dates,15,20,1,20,"DATES");
 	dates->focus = false;
 
 	textbar = create_textbar(stdscr,COLS-1,1,LINES-1,COLOR_PAIR(DWHITE_DBLUE),COLOR_PAIR(DBLUE_DWHITE));
@@ -205,5 +205,8 @@ free_gui(void)
 	endwin();
 
 	free_buck_list(bucks);
+	free_buck_list(dates);
+
 	free(bucks);
+	free(dates);
 }

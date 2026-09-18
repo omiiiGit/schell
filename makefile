@@ -1,12 +1,13 @@
 CC = gcc
 CFLAGS = -g -Wall
-LDFLAGS = -lncurses
+LDFLAGS = -lncursesw
 
 PROG = schell
 
 OBJ = main.o gui.o buck.o buffer.o utils.o textbar.o interpreter.o
 
-.PHONY: build
+.PHONY: build clean run debug
+
 build: $(PROG)
 
 $(PROG): $(OBJ)
@@ -33,15 +34,12 @@ textbar.o: textbar.c textbar.h widgets.h interpreter.c
 interpreter.o: interpreter.c interpreter.h widgets.h
 	$(CC) -c $(CFLAGS) interpreter.c
 
-.PHONY: clean
 clean:
 	rm -fr $(OBJ) $(PROG)
 
-.PHONY: run
 run:
 	./test.sh
 	./$(PROG)
 
-.PHONY: debug
 debug:
 	gdb --tui ./$(PROG)

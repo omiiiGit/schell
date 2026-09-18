@@ -1,7 +1,6 @@
 #ifndef COLOR_H 
 #define COLOR_H 
 
-
 #define CREATE_COLORS_FOR(color) \
 	X(BLACK,color)\
 	X(RED,color)\
@@ -11,7 +10,6 @@
 	X(MAGENTA,color)\
 	X(CYAN,color)\
 	X(WHITE,color)
-
 
 typedef enum {
 	DWHITE = 100,
