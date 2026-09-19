@@ -38,6 +38,40 @@ print_screen_info(void)
 static void
 load_buck_dirs() 
 {
+	if (! empty_buck_list(bucks)) 
+		return;
+
+	char *strarr[1028];
+	int sap = 0;
+
+	int 
+	cmp_files_by_mod(const void *a,const void *b) 
+	{
+		struct stat a_stat,b_stat;
+		char *a_path,*b_path;
+		const char *a_str = *(char**)a;
+		const char *b_str = *(char**)b;
+		
+		asprintf(&a_path,"%s/%s",DIRPATH,a_str);
+		asprintf(&b_path,"%s/%s",DIRPATH,b_str);
+
+		if (lstat(a_path,&a_stat) != 0) 
+			fprintf(stderr,"Foo has been happend");
+		if (lstat(b_path,&b_stat) != 0)
+			fprintf(stderr,"Foo has been happend");
+
+		free(a_path);
+		free(b_path);
+
+		if (a_stat.st_mtime > b_stat.st_mtime)
+			return -1;
+		else if (a_stat.st_mtime < b_stat.st_mtime)
+			return 1;
+
+		return 0;
+
+	}
+
 	DIR *dir;
 	struct dirent *de;
 
@@ -46,12 +80,23 @@ load_buck_dirs()
 	}
 
 	while ((de = readdir(dir)) != NULL) {
-
 		if (strcmp(de->d_name,".") == 0 || strcmp(de->d_name,"..") == 0)
 			continue;
 
-		push_buck_to_list(bucks,de->d_name);
+		strarr[sap] = malloc(1028);
+		strcpy(strarr[sap++],de->d_name);
 	}
+
+	qsort(strarr,sap,sizeof(char*),cmp_files_by_mod);
+
+	for (int i = 0;i < sap;i++)
+		push_buck_to_list(bucks,strarr[i]);
+
+	for (int i = 0;i < sap;i++)
+		free(strarr[i]);
+
+	closedir(dir);
+
 }
 
 static void
@@ -143,7 +188,6 @@ main_event(int c)
 		dates->focus = false;
 		break;
 	}
-
 
 	event_buck_list(bucks,c);
 	event_buck_list(dates,c);

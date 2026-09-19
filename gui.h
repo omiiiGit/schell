@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <locale.h>
 #include <dirent.h>
+#include <sys/stat.h>
 #include "textbar.h"
 #include "color.h"
 #include "buck.h"

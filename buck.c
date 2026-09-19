@@ -83,6 +83,9 @@ create_buck_list(struct buck_list_t *self,int lines,int w, int y, int x,const ch
 void 
 push_buck_to_list(struct buck_list_t *list,char *name)
 {
+	if (name == NULL)
+		return;
+
 	struct buck_t *buck = create_buck_t(name);
 
 	if(list->size == 0)
@@ -137,6 +140,7 @@ del_buck_by_name(struct buck_list_t *list,char *name)
 
 		list->size--;
 		
+		free(b);
 		return found;
 	} else {
 		p->next = n;

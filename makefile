@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g -Wall
+CFLAGS = -g -Wall #-fsanitize=address
 LDFLAGS = -lncursesw
 
 PROG = schell
@@ -38,7 +38,7 @@ clean:
 	rm -fr $(OBJ) $(PROG)
 
 run:
-	./test.sh
+	#./test.sh
 	./$(PROG)
 
 debug:
