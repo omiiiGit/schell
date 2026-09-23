@@ -1,10 +1,10 @@
 CC = gcc
-CFLAGS = -g -Wall #-fsanitize=address
+CFLAGS = -g -Wall -fsanitize=address
 LDFLAGS = -lncursesw
 
 PROG = schell
 
-OBJ = main.o gui.o buck.o buffer.o utils.o textbar.o interpreter.o
+OBJ = main.o gui.o buck.o buffer.o utils.o textbar.o interpreter.o guilist.o
 
 .PHONY: build clean run debug
 
@@ -21,6 +21,9 @@ gui.o: gui.c gui.h color.h buck.h controls.h textbar.h widgets.h
 
 buck.o: buck.c buck.h controls.h
 	$(CC) -c $(CFLAGS) buck.c
+
+guilist.o: guilist.c guilist.h
+	$(CC) -c $(CFLAGS) guilist.c
 
 buffer.o: buffer.h buffer.c
 	$(CC) -c $(CFLAGS) buffer.c

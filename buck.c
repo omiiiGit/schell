@@ -132,17 +132,42 @@ del_buck_by_name(struct buck_list_t *list,char *name)
 			list->start_buck = list->start_buck->next;
 		}
 
+		if (b == list->selected) {
+			list->selected->is_selected = false;
+			list->selected->is_extended = false;
+
+			list->selected = list->selected->next;	
+			list->selected->is_selected = true;
+		}
+
 		list->tail = list->tail->next;
 		list->tail->prev = NULL;
 	} else if (b == list->head) {
 		list->head = list->head->prev;
 		list->head->next = NULL;
 
+		if (b == list->selected) {
+			list->selected->is_selected = false;
+			list->selected->is_extended = false;
+
+			list->selected = list->selected->prev;	
+			list->selected->is_selected = true;
+		}
+
 		list->size--;
 		
 		free(b);
 		return found;
 	} else {
+
+		if (b == list->selected) {
+			list->selected->is_selected = false;
+			list->selected->is_extended = false;
+
+			list->selected = list->selected->next;	
+			list->selected->is_selected = true;
+		}
+
 		p->next = n;
 		n->prev = p;
 

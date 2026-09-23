@@ -8,6 +8,7 @@
 #include "textbar.h"
 #include "color.h"
 #include "buck.h"
+#include "guilist.h"
 #include "controls.h"
 #include "buffer.h"
 #include "widgets.h"

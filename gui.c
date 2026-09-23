@@ -3,37 +3,14 @@
 
 struct buck_list_t *bucks = NULL;
 struct buck_list_t *dates = NULL;
+
+struct GuiList *buck_list = NULL;
+struct GuiList *date_list = NULL;
+
 Textbar *textbar = NULL;
 int ec = 0;
 
 bool is_debug = true;
-
-static int screen_width;
-static int screen_height;
-
-void
-print_screen_info(void)
-{
-	char buffer[BUFFSIZE];
-
-	attron(A_STANDOUT);
-	//sprintf(buffer,"Screen -> %d x %d",COLS,LINES);
-	sprintf(buffer,"Screen -> %d x %d",screen_height,screen_width);
-	mvaddstr(0,COLS-strlen(buffer),buffer);
-	sprintf(buffer,"Number of bucks-> %ld",bucks->size);
-	mvaddstr(1,COLS-strlen(buffer),buffer);
-	sprintf(buffer,"buffer -> %s",BUFFER);
-	mvaddstr(2,COLS-strlen(buffer),buffer);
-	sprintf(buffer,"buck pos -> %d",bucks->pos);
-	mvaddstr(3,COLS-strlen(buffer),buffer);
-	sprintf(buffer,"buck element pos -> %d",bucks->e_pos);
-	mvaddstr(4,COLS-strlen(buffer),buffer);
-	attroff(A_STANDOUT);
-
-	refresh();
-
-	move(0,0);
-}
 
 static void
 load_buck_dirs() 
@@ -180,19 +157,19 @@ main_event(int c)
 		if (i > 0) parse_command();
 		break;
 	case KEY_RIGHT:
-		bucks->focus = false;
-		dates->focus = true;
+		buck_list->focus = false;
+		date_list->focus = true;
 		break;
 	case KEY_LEFT:
-		bucks->focus = true;
-		dates->focus = false;
+		buck_list->focus = true;
+		date_list->focus = false;
 		break;
 	}
 
-	event_buck_list(bucks,c);
-	event_buck_list(dates,c);
+	//event_buck_list(bucks,c);
+	//event_buck_list(dates,c);
 
-	load_dates_files();
+	//load_dates_files();
 }
 
 void
@@ -204,41 +181,54 @@ init_gui()
 	keypad(stdscr,TRUE);
 	cbreak();
 	noecho();
+	set_escdelay(0);
 	curs_set(0);
 
 	gui_init_color();
 
-	bucks = (struct buck_list_t*)malloc(sizeof(struct buck_list_t));
+	/*bucks = (struct buck_list_t*)malloc(sizeof(struct buck_list_t));
 	create_buck_list(bucks,10,15,1,1,"BUCKS");
 	bucks->focus = true;
 
 	dates = (struct buck_list_t*)malloc(sizeof(struct buck_list_t));
 	create_buck_list(dates,15,20,1,20,"DATES");
-	dates->focus = false;
+	dates->focus = false;*/
+
+	buck_list = (GuiList*)malloc(sizeof(GuiList));
+	init_guilist(buck_list,10,10,15,2,2);
+	buck_list->focus = true;
+	buck_list->name = "BUCKS";
+
+
+	date_list = (GuiList*)malloc(sizeof(GuiList));
+	init_guilist(date_list,10,20,15,2,20);
+	date_list->name = "DATES";
+
+	for (int i = 0;i < 10;i++) 
+		push_opt_guilist(buck_list,"foo");
+	for (int i = 0;i < 25;i++) 
+		push_opt_guilist(date_list,"foo");
 
 	textbar = create_textbar(stdscr,COLS-1,1,LINES-1,COLOR_PAIR(DWHITE_DBLUE),COLOR_PAIR(DBLUE_DWHITE));
 
-	load_buck_dirs();
+	//load_buck_dirs();
 }
 
 void 
 run(void)
 {
 
+	refresh();
 	do{		
 
 		main_event(ec);	
 
-		refresh();
 
-		show_buck_list(bucks);
-		show_buck_list(dates);
-
-		if(is_debug)
-			print_screen_info();
-
-		screen_height = LINES;
-		screen_width = COLS;
+		//show_buck_list(bucks);
+		//show_buck_list(dates);
+			
+		updates_guilist(buck_list,ec);	
+		updates_guilist(date_list,ec);	
 
 	}while(ec != _CHAR_ESC && (ec = getch()) != 'q' );
 }
@@ -248,9 +238,16 @@ free_gui(void)
 {
 	endwin();
 
-	free_buck_list(bucks);
-	free_buck_list(dates);
+	//free_buck_list(bucks);
+	//free_buck_list(dates);
 
-	free(bucks);
-	free(dates);
+	//free(bucks);
+	//free(dates);
+	
+	free_guilist(buck_list);
+	free_guilist(date_list);
+
+	free(buck_list);
+	free(date_list);
+	
 }
