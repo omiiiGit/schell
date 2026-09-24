@@ -24,6 +24,7 @@ typedef struct GuiList{
 
 	int e_pos;
 
+	bool change;
 	bool focus;
 	bool hide;
 }GuiList;
@@ -32,6 +33,7 @@ void init_guilist(GuiList *arr,size_t size,int h,int w,int y,int x);
 void push_opt_guilist(GuiList *self,char *s);
 void updates_guilist(GuiList *self,int c);
 void print_guilist(GuiList *self);
+void empty_guilist(GuiList *self);
 void free_guilist(GuiList *self);
 
 #endif

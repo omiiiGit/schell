@@ -138,6 +138,64 @@ gui_init_color(void)
 }
 #undef X
 
+
+static void
+load_bucks() 
+{
+	empty_guilist(buck_list);
+
+	DIR *dir = NULL;
+	struct dirent *dp = NULL;
+
+	if ((dir = opendir(DIRPATH)) == NULL) {
+		fprintf(stderr,"Failed to load bucks directory\n");
+		
+		return;
+	}
+
+	while ((dp = readdir(dir)) != NULL) {
+	
+		if (strcmp(dp->d_name,".") == 0 || strcmp(dp->d_name,"..") == 0)
+			continue;
+
+		push_opt_guilist(buck_list,dp->d_name);
+	}
+
+	closedir(dir);
+}
+
+static void 
+load_dates() 
+{
+	empty_guilist(date_list);
+
+	char *path;
+	DIR *dir;
+	struct dirent *dp;
+
+	char *buck_name = buck_list->arr[buck_list->selected_index];
+
+	asprintf(&path,"%s/%s",DIRPATH,buck_name);
+
+	if ((dir = opendir(path)) == NULL) {
+		fprintf(stderr,"Failed to load bucks dates directory\n");
+		
+		return;
+	}
+
+	while ((dp = readdir(dir)) != NULL) {
+	
+		if (strcmp(dp->d_name,".") == 0 || strcmp(dp->d_name,"..") == 0)
+			continue;
+
+		push_opt_guilist(date_list,dp->d_name);
+	}
+
+	date_list->change = true;
+	closedir(dir);
+	free(path);
+}
+
 static void 
 main_event(int c)
 {
@@ -159,17 +217,25 @@ main_event(int c)
 	case KEY_RIGHT:
 		buck_list->focus = false;
 		date_list->focus = true;
+
+		buck_list->change = true;
+		date_list->change = true;
+
 		break;
 	case KEY_LEFT:
 		buck_list->focus = true;
 		date_list->focus = false;
+
+		buck_list->change = true;
+		date_list->change = true;
+
+		date_list->selected_index = 0;
+		date_list->start_index = 0;
+		date_list->e_pos = 0;
+		date_list->end_index = date_list->h-2;
 		break;
 	}
 
-	//event_buck_list(bucks,c);
-	//event_buck_list(dates,c);
-
-	//load_dates_files();
 }
 
 void
@@ -204,14 +270,11 @@ init_gui()
 	init_guilist(date_list,10,20,15,2,20);
 	date_list->name = "DATES";
 
-	for (int i = 0;i < 10;i++) 
-		push_opt_guilist(buck_list,"foo");
 	for (int i = 0;i < 25;i++) 
-		push_opt_guilist(date_list,"foo");
+		push_opt_guilist(date_list,"foo 22");
 
 	textbar = create_textbar(stdscr,COLS-1,1,LINES-1,COLOR_PAIR(DWHITE_DBLUE),COLOR_PAIR(DBLUE_DWHITE));
 
-	//load_buck_dirs();
 }
 
 void 
@@ -219,18 +282,23 @@ run(void)
 {
 
 	refresh();
+
 	do{		
 
 		main_event(ec);	
 
-
 		//show_buck_list(bucks);
 		//show_buck_list(dates);
 			
+		load_bucks();
 		updates_guilist(buck_list,ec);	
+
+		load_dates();
 		updates_guilist(date_list,ec);	
 
+	//}while(ec != _CHAR_ESC && (ec = wgetch(buck_list->win)) != 'q' );
 	}while(ec != _CHAR_ESC && (ec = getch()) != 'q' );
+
 }
 
 void

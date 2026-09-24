@@ -28,6 +28,7 @@ show_scroll_bar(GuiList *self)
 static void
 draw_guilist(GuiList *self)
 {
+
 	int x,y,len;
 	char *label;
 	x = y = 1;
@@ -88,10 +89,12 @@ init_guilist(GuiList *self,size_t size,int h,int w,int y,int x)
 
 	self->focus = false;
 	self->hide = false;
+	self->change = true;
 
 	self->name = NULL;
 
 	self->win = derwin(stdscr,h,w,y,x);
+	//self->win = newwin(h,w,y,x);
 	if (self->win == NULL) {
 		fprintf(stderr,"Failed to load window\n");
 		return;
@@ -142,6 +145,8 @@ updates_guilist(GuiList *self,int c)
 			} else
 				self->e_pos--;
 
+			self->change = true;
+
 			break;
 	case KEY_DOWN:
 			if (self->selected_index == self->pos - 1)
@@ -155,14 +160,22 @@ updates_guilist(GuiList *self,int c)
 
 			} else
 				self->e_pos++;
+
+			self->change = true;
+
 			break;
 	default: break;
 	}	
 
 skip_event:
 
+	if (self->change) {
 		werase(self->win);
 		draw_guilist(self);
+
+		self->change = false;
+	}
+
 }
 
 void
@@ -171,6 +184,14 @@ print_guilist(GuiList *self)
 	for (int i = 0;i < self->pos;i++) {
 		printw("%s\n",self->arr[i]);
 	}
+}
+
+void 
+empty_guilist(GuiList *self)
+{
+	for (int i = 0;i < self->pos;i++) 
+		free(self->arr[i]);
+	self->pos = 0;
 }
 
 void

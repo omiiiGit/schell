@@ -37,41 +37,22 @@ get_cmd_type(char *cmd)
 	return INTE_INVALID;
 }
 
-static bool
-is_buck_exist(char *name) 
-{
-	bool found = false;
-	struct buck_t *b = bucks->tail;
-
-	while (b != NULL) {
-		if (strcmp(b->name,name) == 0) {
-			found = true;
-			break;
-		}
-		b = b->next;
-	}
-
-	return found;
-}
-
 static void
 add_entry(char *name) 
 {
 	char *path;
 
-	if (is_buck_exist(name)) {
+	/*if (0) {
 		make_intecmd_msg(INTE_ADD,"Buck exist already");
 		return;
-	} 
+	} */
 
-	push_buck_to_list(bucks,name);
 	asprintf(&path,"%s/%s",DIRPATH,name);
 	mkdir(path,0755);
 	free(path);
 
 	make_intecmd_msg(INTE_ADD,"Buck added successfully");
 
-	show_buck_list(bucks);
 }
 
 static void 
@@ -79,19 +60,13 @@ del_entry(char *name)
 {
 	char *path;
 
-	if (! del_buck_by_name(bucks,name)) {
-		make_intecmd_msg(INTE_DELETE,"Buck don't exist");
-		return;
-	}
-
 	asprintf(&path,"%s/%s",DIRPATH,name);
 	rmdir(path);
 	free(path);
 
 	make_intecmd_msg(INTE_DELETE,"Buck deleted successfully");
-
-	show_buck_list(bucks);
 }
+
 
 void
 parse_command(void)
@@ -107,11 +82,9 @@ parse_command(void)
 	switch (cmd_type) {
 	case INTE_ADD:
 			add_entry(buffer);
-			show_buck_list(bucks);		
 			break;
 	case INTE_DELETE:
 			del_entry(buffer);
-			show_buck_list(bucks);
 			break;
 	case INTE_QUIT:
 			ec = _CHAR_ESC;	

@@ -41,8 +41,8 @@ clean:
 	rm -fr $(OBJ) $(PROG)
 
 run:
-	#./test.sh
-	./$(PROG)
+	./test.sh
+	./$(PROG) 2> ./err.log
 
 debug:
 	gdb --tui ./$(PROG)
