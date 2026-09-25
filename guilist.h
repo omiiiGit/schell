@@ -27,6 +27,9 @@ typedef struct GuiList{
 	bool change;
 	bool focus;
 	bool hide;
+	bool is_ele_added;
+	bool is_ele_deleted;
+	bool is_ele_pos_changed;
 }GuiList;
 
 void init_guilist(GuiList *arr,size_t size,int h,int w,int y,int x);

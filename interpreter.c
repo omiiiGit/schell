@@ -67,6 +67,22 @@ del_entry(char *name)
 	make_intecmd_msg(INTE_DELETE,"Buck deleted successfully");
 }
 
+static void
+add_date_entry(char *name)
+{
+	char *path;
+	FILE *file;
+	char *buck_name = buck_list->arr[buck_list->selected_index];
+
+	asprintf(&path,"%s/%s/%s",DIRPATH,buck_name,name);
+
+	if ((file = fopen(path,"w")) == NULL ) {
+		fprintf(stderr,"Failed to load file %s\n",strerror(errno));
+	}
+
+	free(path);
+	fclose(file);
+}
 
 void
 parse_command(void)
@@ -82,9 +98,19 @@ parse_command(void)
 	switch (cmd_type) {
 	case INTE_ADD:
 			add_entry(buffer);
+			buck_list->change = true;
+			buck_list->is_ele_added = true;
 			break;
 	case INTE_DELETE:
 			del_entry(buffer);
+			buck_list->change = true;
+			buck_list->is_ele_deleted = true;
+			break;
+	case INTE_ADDDATE:
+			add_date_entry(buffer);
+			date_list->is_ele_added = true;
+			break;
+	case INTE_DELDATE:
 			break;
 	case INTE_QUIT:
 			ec = _CHAR_ESC;	

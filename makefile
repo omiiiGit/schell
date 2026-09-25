@@ -41,7 +41,7 @@ clean:
 	rm -fr $(OBJ) $(PROG)
 
 run:
-	./test.sh
+	#./test.sh
 	./$(PROG) 2> ./err.log
 
 debug:

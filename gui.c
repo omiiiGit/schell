@@ -142,6 +142,9 @@ gui_init_color(void)
 static void
 load_bucks() 
 {
+	if (!buck_list->change)
+		return;
+
 	empty_guilist(buck_list);
 
 	DIR *dir = NULL;
@@ -173,6 +176,11 @@ load_dates()
 	DIR *dir;
 	struct dirent *dp;
 
+	date_list->selected_index = 0;
+	date_list->start_index = 0;
+	date_list->e_pos = 0;
+	date_list->end_index = date_list->h - 2;
+
 	char *buck_name = buck_list->arr[buck_list->selected_index];
 
 	asprintf(&path,"%s/%s",DIRPATH,buck_name);
@@ -191,7 +199,6 @@ load_dates()
 		push_opt_guilist(date_list,dp->d_name);
 	}
 
-	date_list->change = true;
 	closedir(dir);
 	free(path);
 }
@@ -229,10 +236,6 @@ main_event(int c)
 		buck_list->change = true;
 		date_list->change = true;
 
-		date_list->selected_index = 0;
-		date_list->start_index = 0;
-		date_list->e_pos = 0;
-		date_list->end_index = date_list->h-2;
 		break;
 	}
 
@@ -267,11 +270,8 @@ init_gui()
 
 
 	date_list = (GuiList*)malloc(sizeof(GuiList));
-	init_guilist(date_list,10,20,15,2,20);
+	init_guilist(date_list,10,20,20,2,20);
 	date_list->name = "DATES";
-
-	for (int i = 0;i < 25;i++) 
-		push_opt_guilist(date_list,"foo 22");
 
 	textbar = create_textbar(stdscr,COLS-1,1,LINES-1,COLOR_PAIR(DWHITE_DBLUE),COLOR_PAIR(DBLUE_DWHITE));
 
@@ -283,20 +283,29 @@ run(void)
 
 	refresh();
 
+	load_bucks();
+	load_dates();
+
 	do{		
 
 		main_event(ec);	
-
-		//show_buck_list(bucks);
-		//show_buck_list(dates);
 			
-		load_bucks();
+		if (buck_list->is_ele_added || buck_list->is_ele_deleted) {
+			load_bucks();
+			buck_list->is_ele_added = false;
+			buck_list->is_ele_deleted = false;
+		}
+
 		updates_guilist(buck_list,ec);	
 
-		load_dates();
+		if (buck_list->is_ele_pos_changed || date_list->is_ele_added) {
+			load_dates();
+			date_list->change = true;
+			buck_list->is_ele_pos_changed = false;
+		}
+
 		updates_guilist(date_list,ec);	
 
-	//}while(ec != _CHAR_ESC && (ec = wgetch(buck_list->win)) != 'q' );
 	}while(ec != _CHAR_ESC && (ec = getch()) != 'q' );
 
 }
@@ -306,12 +315,6 @@ free_gui(void)
 {
 	endwin();
 
-	//free_buck_list(bucks);
-	//free_buck_list(dates);
-
-	//free(bucks);
-	//free(dates);
-	
 	free_guilist(buck_list);
 	free_guilist(date_list);
 

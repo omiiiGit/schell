@@ -18,7 +18,8 @@ show_scroll_bar(GuiList *self)
 	{
 		if(i == scroll_pos)
 		{
-			wattron(self->win,COLOR_PAIR(RED_BLACK)); mvwaddwstr(self->win,w_height,w_width,L"🮐"); wattroff(self->win,COLOR_PAIR(RED_BLACK));
+			//wattron(self->win,COLOR_PAIR(RED_BLACK)); mvwaddwstr(self->win,w_height,w_width,L"🮐"); wattroff(self->win,COLOR_PAIR(RED_BLACK));
+			wattron(self->win,COLOR_PAIR(RED_RED)); mvwaddch(self->win,w_height,w_width,' '); wattroff(self->win,COLOR_PAIR(RED_RED));
 		}
 		else
 			mvwaddch(self->win,w_height,w_width,ACS_VLINE);
@@ -91,14 +92,21 @@ init_guilist(GuiList *self,size_t size,int h,int w,int y,int x)
 	self->hide = false;
 	self->change = true;
 
+	self->is_ele_deleted = false;
+	self->is_ele_added = false;
+
+	self->is_ele_pos_changed = false;
+
 	self->name = NULL;
 
-	self->win = derwin(stdscr,h,w,y,x);
-	//self->win = newwin(h,w,y,x);
+	//self->win = derwin(stdscr,h,w,y,x);
+	self->win = newwin(h,w,y,x);
 	if (self->win == NULL) {
 		fprintf(stderr,"Failed to load window\n");
 		return;
 	}
+
+	keypad(self->win,TRUE);
 }
 
 void 
@@ -146,6 +154,7 @@ updates_guilist(GuiList *self,int c)
 				self->e_pos--;
 
 			self->change = true;
+			self->is_ele_pos_changed = true;
 
 			break;
 	case KEY_DOWN:
@@ -162,6 +171,7 @@ updates_guilist(GuiList *self,int c)
 				self->e_pos++;
 
 			self->change = true;
+			self->is_ele_pos_changed = true;
 
 			break;
 	default: break;
@@ -174,6 +184,7 @@ skip_event:
 		draw_guilist(self);
 
 		self->change = false;
+		self->is_ele_added = false;
 	}
 
 }

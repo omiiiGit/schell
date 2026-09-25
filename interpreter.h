@@ -6,8 +6,10 @@
 #include <ncurses.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <errno.h>
 #include "textbar.h"
 #include "widgets.h"
+#include "guilist.h"
 #include "buffer.h"
 #include "color.h"
 
