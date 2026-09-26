@@ -142,6 +142,34 @@ gui_init_color(void)
 static void
 load_bucks() 
 {
+	int 
+	cmp(const void *a,const void *b)
+	{	
+		char *a_str,*b_str,*a_path,*b_path;	
+		struct stat a_buf,b_buf;
+
+		a_str = *(char**)a;
+		b_str = *(char**)b;
+
+		asprintf(&a_path,"%s/%s",DIRPATH,a_str);
+		asprintf(&b_path,"%s/%s",DIRPATH,b_str);
+
+		lstat(a_path,&a_buf);
+		lstat(b_path,&b_buf);
+
+		free(a_path);
+		free(b_path);
+
+		if (a_buf.st_mtime > b_buf.st_mtime) 
+			return -1;
+		else if (a_buf.st_mtime < b_buf.st_mtime) 
+			return 1;
+		else
+			return 0;
+
+	}
+
+
 	if (!buck_list->change)
 		return;
 
@@ -165,11 +193,43 @@ load_bucks()
 	}
 
 	closedir(dir);
+	qsort(buck_list->arr,buck_list->pos,sizeof(char*),cmp);
 }
 
 static void 
 load_dates() 
 {
+	int 
+	_cmp(const void *a,const void *b)
+	{	
+		char *a_str,*b_str,*a_path,*b_path;	
+		struct stat a_buf,b_buf;
+		char *buck_name = buck_list->arr[buck_list->selected_index];
+
+		a_str = *(char**)a;
+		b_str = *(char**)b;
+
+		if (1) {
+
+			asprintf(&a_path,"%s/%s/%s",DIRPATH,buck_name,a_str);
+			asprintf(&b_path,"%s/%s/%s",DIRPATH,buck_name,b_str);
+		}
+
+		lstat(a_path,&a_buf);
+		lstat(b_path,&b_buf);
+
+		free(a_path);
+		free(b_path);
+
+		if (a_buf.st_mtime > b_buf.st_mtime) 
+			return -1;
+		else if (a_buf.st_mtime < b_buf.st_mtime) 
+			return 1;
+		else
+			return 0;
+
+	}
+
 	empty_guilist(date_list);
 
 	char *path;
@@ -201,6 +261,8 @@ load_dates()
 
 	closedir(dir);
 	free(path);
+
+	qsort(date_list->arr,date_list->pos,sizeof(char*),_cmp);
 }
 
 static void 
@@ -298,7 +360,7 @@ run(void)
 
 		updates_guilist(buck_list,ec);	
 
-		if (buck_list->is_ele_pos_changed || date_list->is_ele_added) {
+		if (buck_list->is_ele_pos_changed || date_list->is_ele_added || date_list->is_ele_deleted) {
 			load_dates();
 			date_list->change = true;
 			buck_list->is_ele_pos_changed = false;

@@ -1,3 +1,6 @@
+#define _XOPEN_SOURCE 500
+#define _GNU_SOURCE
+
 #include "interpreter.h"
 
 const char *DIRPATH = "./dir";
@@ -19,6 +22,24 @@ static void
 make_intecmd_msg(INTECMD type,char *msg) 
 {
 	strcpy(InteCommands[type].message,msg);
+}
+
+static int
+delent(const char *path)
+{
+	int 
+	delent_func(const char *fpath,const struct stat *sbuf,int typeflag,struct FTW *fbuf)
+	{
+		int foo = remove(fpath);
+
+		if (foo > 0)
+			fprintf(stderr,"Failed to remove file %s->%s",fpath,strerror(errno));
+
+		return foo;
+	}
+
+
+	return nftw(path,delent_func,64,FTW_DEPTH | FTW_PHYS);
 }
 
 static INTECMD 
@@ -47,6 +68,7 @@ add_entry(char *name)
 		return;
 	} */
 
+
 	asprintf(&path,"%s/%s",DIRPATH,name);
 	mkdir(path,0755);
 	free(path);
@@ -61,10 +83,14 @@ del_entry(char *name)
 	char *path;
 
 	asprintf(&path,"%s/%s",DIRPATH,name);
-	rmdir(path);
+
+	if ((delent(path)) != 0)
+		make_intecmd_msg(INTE_DELETE,"Buck can't be deleted");
+	else
+		make_intecmd_msg(INTE_DELETE,"Buck deleted successfully");
+
 	free(path);
 
-	make_intecmd_msg(INTE_DELETE,"Buck deleted successfully");
 }
 
 static void
